@@ -1,0 +1,79 @@
+<!-- <div class="col-lg-4 col-sm-6 col-xs-12"> -->
+    <div class="artistWrapper" [class.active]="reviewChecked">
+        <div class="artist_card d-flex">
+            <div class="artistImg d-flex justify-content-center" *ngIf="detail['thumbnail']  !=''"
+              (click)="onEdit(detail.slug, type.section, detail['status'] )">
+            <!-- <div class="artistImg d-flex justify-content-center" *ngIf="detail['thumbnail']  !=''"
+              (click)=" detail['status'] !== 'active' && detail['status'] !== 'reviewed' && detail['status'] !== 'publish' && onEdit(detail.slug,type.section)"> -->
+                <div class="sqrImg">
+                <!-- <img src="../../assets/ic-person.svg" class="img-fluid" alt=""> -->
+                <img *ngIf="type.section=='artist'" [defaultImage]="'../../../assets/ic-person.svg'" [lazyLoad]="s3Url['basePath']+s3Url['artistPath']+'/'+detail['profilePic']" class="img-fluid"/>
+                <img *ngIf="type.section=='collection'" [defaultImage]="'../../../assets/ic-person.svg'" [lazyLoad]="s3Url['basePath']+s3Url['collectionPath']+constantImg.horizontalMedium+detail['thumbnail']['horizontal']['ratio2']['sourceLink']" class="img-fluid"/>
+                <img *ngIf="type.section=='show'" [defaultImage]="'../../../assets/ic-person.svg'" [lazyLoad]="s3Url['basePath']+s3Url['showPath']+constantImg.squareMedium+detail['thumbnail']['square']['ratio1']['sourceLink']" class="img-fluid"/>
+                <img *ngIf="type.section=='individual'" [defaultImage]="'../../../assets/ic-person.svg'" [lazyLoad]="s3Url['basePath']+s3Url['episodePath']+constantImg.horizontalMedium+detail['thumbnail']['horizontal']['ratio1']['sourceLink']" class="img-fluid"/>
+                <!-- <img [attr.src]="stageCollectionS3Url.basePath+stageCollectionS3Url.collectionPath+constantImg.horizontalMedium+stageCollectionObj.thumbnail.horizontal.ratio1.sourceLink" loading="lazy" alt=""> -->
+                <!-- {{s3Url['basePath']+s3Url['episodePath']+constantImg.horizontalMedium+detail['thumbnail']['horizontal']['ratio1']['sourceLink']}} -->
+                <!-- {{detail | json}} -->
+                </div>
+            </div>
+
+            <div class="artistImg d-flex justify-content-center" *ngIf="detail['thumbnail']  == ''"
+              (click)="onEdit(detail.slug, type.section, detail['status'] )">
+                <img *ngIf="type.section=='artist'" src="../../assets/images/2.jpeg" class="img-fluid" />
+                <img *ngIf="type.section=='collection'" src="../../assets/images/2.jpeg" class="img-fluid" />
+                <img *ngIf="type.section=='show'" src="../../assets/images/2.jpeg" class="img-fluid" />
+                <img *ngIf="type.section=='individual'" src="../../assets/images/2.jpeg" class="img-fluid" />
+            </div>
+            <div class="artistCardDt">
+                <div class="artName_Location" *ngIf="type.section=='artist'">
+                    <h6 class="mb-0" [innerHtml]="detail.middleName=='' ? (detail.firstName+' '+ detail.lastName) : (detail.firstName+' '+ detail.middleName+' '+ detail.lastName)"></h6>
+                    <p class="mb-0" [innerHtml]="detail.city"></p>
+                </div>
+                <div class="artName_Location" *ngIf="type.section=='collection' || type.section=='show'|| type.section=='individual' ">
+                    <h6 class="mb-0" [innerHtml]="detail.title"></h6>
+                </div>
+                <div class="langDt">
+                    <p class="mb-0">Data Entry</p>
+                    <div class="selLang cCheckbox d-flex">
+                        <input class="styled-checkbox pointer-event" type="checkbox" [checked]="detail.englishValidated">
+                        <label class="mb-0 d-flex align-items-center pointer-event">English</label>
+                        
+                        <input class="styled-checkbox pointer-event" type="checkbox" [checked]="detail.hindiValidated">
+                        <label class="ml-2 mb-0 d-flex align-items-center pointer-event">Hindi</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="completed_Review d-flex justify-content-between align-items-center">
+            <div class="artreviewer">
+                <h6 class="mb-0 text-capitalize">
+                    <span class="txt_color_info_1" *ngIf="detail['status']== 'completed'"
+                      [innerHtml]="'Completed'"></span>
+                      <span class="txt_color_info_1" *ngIf="detail['status']== 'active'"
+                      [innerHtml]="'Published'"></span>
+                    <span class="txt_color_grey" *ngIf="detail['status']== 'draft' || detail['status']== 'inactive'" [innerHtml]="detail['activity']['action'] +' draft'"></span>
+                    <span class="txt_color_info_1" *ngIf="detail['status']== 'forReview'">For Review</span>
+                    <span class="txt_color_info_1" *ngIf="detail['status']== 'publish'" [innerHtml]="'Publish'"></span>
+                    <span class="txt_color_info_2" *ngIf="detail['status']== 'reviewed'" [innerHtml]=" detail['status']"></span>
+                    <button class="view-detail" *ngIf="(currentUrl =='content' && (detail['status']=='draft' || detail['status']=='completed')) || (currentUrl =='review-publish' && (detail['status']=='forReview' || detail['status']=='reviewed'))" (click)="onEdit(detail.slug, type.section, detail['status'] )">VIEW DETAIL</button>
+                </h6>
+                <p class="mb-0">
+                    <span [innerHtml]="detail['activity']['writerName']+', '"></span>
+                    <span [innerHtml]="detail['activity']['updatedAt'] | date:'hh:mm a, d MMM yyyy'"></span>
+                </p>
+            </div>
+            <div class="id_more d-flex justify-content-center align-items-center">
+                <h6 class="mb-0" [innerHtml]="detail['_id']"></h6>
+                <span class="eleIc ml-3">                
+                    <img src="assets/ic-more-vert.svg"
+     class="img-fluid">
+                </span>
+            </div>
+        </div> 
+
+        <div class="cCheckbox artcrd" *ngIf="type.tab == 'completed'">
+            <input class="styled-checkbox" #selectOne value="true" [id]="'artcrd'+detail._id" type="checkbox" [checked]="reviewChecked" (change)="checkUncheck(selectOne.checked)">
+            <label [for]="'artcrd'+detail._id" class="ml-2 mb-0 d-flex align-items-center"></label>
+        </div>
+    </div>
+<!-- </div> -->

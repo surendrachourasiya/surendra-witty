@@ -1,0 +1,123 @@
+<div class="container p-0">
+    <div class="row contents">
+            <!-- left panel -->
+            <div class="col-lg-2">
+                <div class="Tabs__contents">
+                    <ul class="list-unstyled">
+                        <li><a class="rounded-pill" (click)='resetSearch()' routerLinkActive="active" [routerLink]="['../artist']">
+                            <span></span> ARTISTS
+                        </a></li>
+                        <li><a class="rounded-pill" (click)='resetSearch()' routerLinkActive="active"  [routerLink]="['../show']">
+                            <span></span> SHOWS
+                        </a></li>
+                        <li><a class="rounded-pill" (click)='resetSearch()' routerLinkActive="active" [routerLink]="['../collection']">
+                            <span></span> COLLECTION
+                        </a></li>
+                        <li><a class="rounded-pill" (click)='resetSearch()' routerLinkActive="active" [routerLink]="['../individual']">
+                            <span></span> INDIVIDUAL
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /left panel -->
+    
+            <!-- Right Panel -->
+            <div class="col-lg-10 wrapPanel__contents">
+                <div class="panel__contents">
+                    <!-- Inner tab panel -->
+                    <div class="tabs">
+                        <ul class="nav nav-pills mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link" [class.active]="isActiveSubTab('all')" (click)="changeActiveSubTab('all')">ALL (<span [innerHtml]="tabCountObj['all']"></span>)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" [class.active]="isActiveSubTab('draft')" (click)="changeActiveSubTab('draft')">DRAFT (<span [innerHtml]="tabCountObj['draft']"></span>)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" [class.active]="isActiveSubTab('completed')" (click)="changeActiveSubTab('completed')">COMPLETED (<span [innerHtml]="tabCountObj['completed']"></span>)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" [class.active]="isActiveSubTab('review')" (click)="changeActiveSubTab('review')">REVIEW (<span [innerHtml]="tabCountObj['review']"></span>)</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /Inner tab panel -->
+                    <!-- Top bar actions -->
+                    <div class="topPanel__contents d-flex align-items-center justify-content-between">
+                        <div class="leftAction d-flex align-items-center">
+                            <div class="addArtist" *ngIf="tabSelected=='all' || tabSelected=='draft'">
+                                <div class="reviewSend">
+                                    <button *ngIf="typeSelected == 'artist'" type="button" class="btn rounded-pill sendReview" [routerLink]="['../../update-artist']" >CREATE ARTIST</button>
+                                    <button *ngIf="typeSelected == 'collection'" type="button" class="btn rounded-pill sendReview" [routerLink]="['../../update-collection']" >CREATE COLLECTION</button>
+                                    <button *ngIf="typeSelected == 'show'" type="button" class="btn rounded-pill sendReview" [routerLink]="['../../update-show']" >CREATE SHOW</button>
+                                    <button *ngIf="typeSelected == 'individual'" type="button" class="btn rounded-pill sendReview" [routerLink]="['../../update-individual']" >CREATE INDIVIDUAL</button>
+                                </div>
+                            </div>
+                            <!-- send to review action for completed tab -->
+                            <div class="cCheckbox" *ngIf="tabSelected=='completed'" >
+                                <input class="styled-checkbox" #selectAllField id="styled-checkbox-4" type="checkbox" value="true" [checked]="sentToReviewLength==listing.data.length && listing.data.length!=0" (change)="selectAllEvent(selectAllField.checked)">
+                                <label for="styled-checkbox-4" class="mb-0 d-flex align-items-center">SELECT ALL</label>
+                            </div>
+                            <div class="reviewSend"  *ngIf="tabSelected=='completed'">
+                                <button type="button" class="btn rounded-pill sendReview" [disabled]="sentToReviewLength == 0 || saveApiCalling" (click)="apiSendFoReview()">
+                                    <span *ngIf="saveApiCalling" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                    <span>SEND TO REVIEW</span>
+                                </button>
+                            </div>
+                            <!-- /send to review action for completed tab -->
+                        </div>
+                        <div class="right__topPanel">
+                            <div class="search position-relative">
+                                <input class="form-control rounded-pill" type="text" (ngModelChange)="onSearch($event)" [(ngModel)]="searchText" name="" value="" [placeholder]="'Search '+typeSelected" /> 
+                                <span class="position-absolute">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
+                                        <defs>
+                                            <path id="a" d="M9.625 8.5h-.592l-.21-.203A4.853 4.853 0 0 0 10 5.125 4.875 4.875 0 1 0 5.125 10a4.853 4.853 0 0 0 3.172-1.178l.203.21v.593l3.75 3.742 1.117-1.117L9.625 8.5zm-4.5 0A3.37 3.37 0 0 1 1.75 5.125 3.37 3.37 0 0 1 5.125 1.75 3.37 3.37 0 0 1 8.5 5.125 3.37 3.37 0 0 1 5.125 8.5z"/>
+                                            <path id="c" d="M0 0h37.5v37.5H0z"/>
+                                        </defs>
+                                        <g fill="none" fill-rule="evenodd" opacity=".704" transform="translate(2 2)">
+                                            <mask id="b" fill="#fff">
+                                                <use xlink:href="#a"/>
+                                            </mask>
+                                            <g mask="url(#b)">
+                                                <use fill="#000" transform="translate(-11.75 -11.75)" xlink:href="#c"/>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Top bar actions -->
+
+                    <!-- Card listing section -->
+                    <div>
+                        <div>
+                            <div class="row" *ngIf="listing.data.length > 0">
+                                <div class="col-lg-4 col-sm-6 col-xs-12" *ngFor="let item of listing.data; let i = index">
+                                    <app-content-detail-card class="" (indivCheckStatus)="indivStatusChange($event, i)" [type]="{'section': typeSelected, 'tab': tabSelected}" [reviewChecked]="item.reviewChecked" [s3Url]="listing.s3Url" [detail]="item" ></app-content-detail-card>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Card listing section -->
+
+                    <!-- Card listing section -->
+                    <div class="col-lg-2" style="margin: 15px auto;text-align: center;"
+                      *ngIf="listing.data.length > 0 && listing.totalList > listing.data.length">
+                        <div class="Tabs__contents">
+                            <ul class="list-unstyled">
+                                <li><a class="rounded-pill" (click)='loadMoreData()' style="background-color:#7a0600; color:#fff">
+                                    <span></span> Load More
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>  
+                    <!-- /Card listing section -->
+
+                </div>
+            </div>
+            <!-- Right Panel -->
+        <!-- </div> -->
+    </div>
+</div>

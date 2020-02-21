@@ -1,0 +1,8 @@
+
+    <div class="videoThumbnail">
+        <img [attr.src]="videoThumbnail" class="img-fluid" alt="" />
+    </div>
+    <div class="title_artistStory">
+        <h4 [innerHtml]="videoDetail.title"></h4>
+        <p>Duration : <span [innerHtml]="videoDetail.duration | timeFormatter"></span>min</p>
+    </div>

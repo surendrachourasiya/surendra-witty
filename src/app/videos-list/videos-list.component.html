@@ -1,0 +1,481 @@
+<div class="container">
+    <div class="row">
+        <div class="content">
+            <!-- Content Top Part -->
+            <div class="top__content d-flex justify-content-between align-items-end position-relative">
+                <!-- <div class="VuploadBtn btn-file">
+                    <form class="d-flex align-items-center">
+                        <button type="button" class="btn" data-toggle="modal" data-target="#videoCategory">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;"
+                                xml:space="preserve" width="24px" height="24px" class="mr-3">
+                                <g>
+                                    <g>
+                                        <g>
+                                            <path
+                                                d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#FFFFFF" />
+                                        </g>
+                                    </g>
+                                    <g>
+                                        <g>
+                                            <polygon
+                                                points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#FFFFFF" />
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg> UPLOAD VIDEOS
+                        </button>
+                    </form>
+                </div> -->
+                <div class="span3 widget-span widget-type-raw_html custom-search position-relative" data-widget-type="raw_html"
+                    data-x="4" data-w="3">
+                    <div class="cell-wrapper layout-widget-wrapper">
+                        <span id="" class="">
+                            <form role="search" class="navbar-form navbar-left" id="express-form">
+                                <div class="vd_Search position-relative">
+                                    <input name="q" placeholder="Search Video" [(ngModel)]="searchText" (keyup)="searchRecord($event)"
+                                        class="form-control tt-input" id="express-form-typeahead" autocomplete="off"
+                                        spellcheck="false" dir="auto" type="text">
+                                    <!-- <button class="search-btn" type="submit">
+                                        <span class="icon"></span>
+                                    </button> -->
+                                    <span class="position-absolute">
+                                        <img src="assets/images/search.png" class="img-fluid" alt="" width="16px" />
+                                    </span>
+                                </div>
+                            </form>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- Content Top Part -->
+            <div id="accordion">
+
+                <!-- upload video list -->
+                <div class="card" *ngIf="uploadList.count > 0">
+                    <div id="headingOne" class="d-flex justify-content-between align-items-center">
+                        <h5 class="mt-4">
+                            Upload Video &nbsp; <span [innerHtml]="'('+uploadList.count+')'"> </span>
+                        </h5>
+                    </div>
+
+                    <div *ngFor="let item of uploadList.fileList">
+                        <div class="card-body row" *ngIf="item.status !== 'success'">
+                            <div class="videoCard col-lg-3 col-xs-6 mb-4 pl-0 pr-0">
+                                <div class="videoThumbnail">
+                                    <img src='../../assets/images/2.jpeg' class="img-fluid" alt="" />
+                                </div>
+                                <div class="title_artistStory">
+                                    <h4 [innerHtml]="item.fileInitName" style="font-size: 21px; font-weight: 600; margin-top: 12px;"></h4>
+                                </div>
+
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
+                                        aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': item.progressPer+'%'}">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /artist episodes list -->
+
+
+                <!-- artist episodes list -->
+                <div class="card">
+                    <div id="headingOne" class="d-flex justify-content-between align-items-center">
+                        <h5 class="mt-4">
+                            <button class="btn d-flex align-items-center" id="artist-section" data-toggle="collapse"
+                                data-target="#artist-story" aria-expanded="true" aria-controls="artist-story" (click)="getVideoList('artistPeripheral', searchText, '');">
+                                <svg [ngClass]="artistPeripheral.isToggle ? 'transRotate' : ''" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="mr-3 arrowButton"
+                                    id="Capa_1" x="0px" y="0px" width="15px" height="15px" viewBox="0 0 292.359 292.359"
+                                    style="enable-background:new 0 0 292.359 292.359;" xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path d="M222.979,133.331L95.073,5.424C91.456,1.807,87.178,0,82.226,0c-4.952,0-9.233,1.807-12.85,5.424   c-3.617,3.617-5.424,7.898-5.424,12.847v255.813c0,4.948,1.807,9.232,5.424,12.847c3.621,3.617,7.902,5.428,12.85,5.428   c4.949,0,9.23-1.811,12.847-5.428l127.906-127.907c3.614-3.613,5.428-7.897,5.428-12.847   C228.407,141.229,226.594,136.948,222.979,133.331z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#ffffff" />
+                                        </g>
+                                    </g>
+                                </svg> Artist Story &nbsp; <span [innerHtml]="'('+artistPeripheral.count+')'"> </span>
+                            </button>
+                        </h5>
+                        <div class="mt-4">
+                            <div class="uploadBtn">
+                                <!-- <input type="file" multiple accept="video/mp4" formArrayName='pheripheralVideo' (change)="changeVideo($event, 'mediaList')"> -->
+                                <input type="file" multiple accept="video/mp4" (change)="changeVideo($event, 'uploadList', artistPeripheral.count,
+                                  'artist/main-video',
+                                  'artist')">
+                                <!-- <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="50px" height="25px" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve"><g><g>
+                                            <g id="attachment">
+                                                <path d="M140.25,395.25C63.75,395.25,0,331.5,0,255s63.75-140.25,140.25-140.25H408c56.1,0,102,45.9,102,102    c0,56.1-45.9,102-102,102H191.25c-35.7,0-63.75-28.05-63.75-63.75s28.05-63.75,63.75-63.75H382.5v38.25H191.25    c-15.3,0-25.5,10.2-25.5,25.5s10.2,25.5,25.5,25.5H408c35.7,0,63.75-28.05,63.75-63.75S443.7,153,408,153H140.25    c-56.1,0-102,45.9-102,102c0,56.1,45.9,102,102,102H382.5v38.25H140.25z" data-original="#000000" class="active-path" fill="#000000"/>
+                                            </g>
+                                        </g></g> </svg>
+                                </span>-->
+                                <span class="d-flex justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                                        viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"
+                                        width="12px" height="12px" class="mr-2">
+                                        <g>
+                                            <g>
+                                                <g>
+                                                    <path d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                            <g>
+                                                <g>
+                                                    <polygon points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>UPLOAD ARTIST STORY </span>
+                            </div>
+                            <!-- <div class="progress mt-2">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div> -->
+                        </div>
+                    </div>
+
+                    <div id="artist-story" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body row">
+                            <app-video-detail-card class="videoCard col-lg-3 col-xs-6 mb-4 " [videoDetail]="{'title': item.sourceLink, 'duration':item.duration }"
+                                [videoThumbnail]="s3Url['basePath']+s3Url['artistPath']+'/horizontal/'+item['thumbnail']"
+                                *ngFor="let item of artistPeripheral.list | slice:0: artistPeripheral.sliceLimit; let
+                                i=index">
+                            </app-video-detail-card>
+
+                            <!-- Show More Videos Button -->
+                            <div class="shMore__Videos">
+                                <button type="button" class="btn" *ngIf="artistPeripheral.count > artistPeripheral.sliceLimit"
+                                    (click)="setSliceLimit('artistPeripheral',artistPeripheral.count);">Show More</button>
+                            </div>
+                            <!-- ./Show More Videos Button -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /artist episodes list -->
+
+                <!-- show peripheral video list -->
+                <div class="card">
+                    <div class="d-flex justify-content-between align-items-center" id="headingTwo">
+                        <h5>
+                            <button class="btn collapsed" id="shows-peripheral-section" data-toggle="collapse"
+                                data-target="#shows-peripheral" aria-expanded="false" aria-controls="shows-peripheral"
+                                (click)="getVideoList('show_pheripheral', searchText, '')">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1" class="mr-3 arrowButton" id="Capa_1" x="0px" y="0px" width="15px"
+                                    height="15px" viewBox="0 0 292.359 292.359" style="enable-background:new 0 0 292.359 292.359;"
+                                    xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path d="M222.979,133.331L95.073,5.424C91.456,1.807,87.178,0,82.226,0c-4.952,0-9.233,1.807-12.85,5.424   c-3.617,3.617-5.424,7.898-5.424,12.847v255.813c0,4.948,1.807,9.232,5.424,12.847c3.621,3.617,7.902,5.428,12.85,5.428   c4.949,0,9.23-1.811,12.847-5.428l127.906-127.907c3.614-3.613,5.428-7.897,5.428-12.847   C228.407,141.229,226.594,136.948,222.979,133.331z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#ffffff" />
+                                        </g>
+                                    </g>
+                                </svg> Shows Peripheral &nbsp; <span [innerHtml]="'('+show_pheripheral.count+')'">
+                                </span>
+                            </button>
+                        </h5>
+                        <div class="">
+                            <div class="uploadBtn">
+                                <!-- <input type="file" multiple accept="video/mp4" formArrayName='pheripheralVideo' (change)="changeVideo($event, 'mediaList')"> -->
+                                <input type="file" multiple accept="video/mp4" (change)="changeVideo($event, 'uploadList', show_pheripheral.count, 'show/main-video',
+                          'show_pheripheral')">
+                                <!-- <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="50px" height="25px" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve"><g><g>
+                                            <g id="attachment">
+                                                <path d="M140.25,395.25C63.75,395.25,0,331.5,0,255s63.75-140.25,140.25-140.25H408c56.1,0,102,45.9,102,102    c0,56.1-45.9,102-102,102H191.25c-35.7,0-63.75-28.05-63.75-63.75s28.05-63.75,63.75-63.75H382.5v38.25H191.25    c-15.3,0-25.5,10.2-25.5,25.5s10.2,25.5,25.5,25.5H408c35.7,0,63.75-28.05,63.75-63.75S443.7,153,408,153H140.25    c-56.1,0-102,45.9-102,102c0,56.1,45.9,102,102,102H382.5v38.25H140.25z" data-original="#000000" class="active-path" fill="#000000"/>
+                                            </g>
+                                        </g></g> </svg>
+                                </span>-->
+                                <span class="d-flex justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                                        viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"
+                                        width="12px" height="12px" class="mr-2">
+                                        <g>
+                                            <g>
+                                                <g>
+                                                    <path d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                            <g>
+                                                <g>
+                                                    <polygon points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>UPLOAD SHOW PERIPHERAL</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="shows-peripheral" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body row">
+                            <app-video-detail-card class="videoCard col-lg-3 col-xs-6 mb-4 " [videoDetail]="{'title': item.sourceLink, 'duration':item.duration }"
+                                [videoThumbnail]="s3Url['basePath']+s3Url['showPath']+'/horizontal/'+item['thumbnail']"
+                                *ngFor="let item of show_pheripheral.list | slice:0: show_pheripheral.sliceLimit; let
+                        i=index"></app-video-detail-card>
+                            <!-- Show More Videos Button -->
+                            <div class="shMore__Videos">
+                                <button type="button" class="btn" *ngIf="show_pheripheral.count > show_pheripheral.sliceLimit"
+                                    (click)="setSliceLimit('show_pheripheral',show_pheripheral.count);">Show More</button>
+                            </div>
+                            <!-- ./Show More Videos Button -->
+                        </div>
+                    </div>
+                </div>
+                <!--/ show video list -->
+
+                <!-- show video list -->
+                <div class="card">
+                    <div class="d-flex justify-content-between align-items-center" id="headingTwo">
+                        <h5>
+                            <button class="btn collapsed" id="shows-videos-section" data-toggle="collapse" data-target="#shows-videos"
+                                aria-expanded="false" aria-controls="shows-videos" (click)="getVideoList('show', searchText, '')">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1" class="mr-3 arrowButton" id="Capa_1" x="0px" y="0px" width="15px"
+                                    height="15px" viewBox="0 0 292.359 292.359" style="enable-background:new 0 0 292.359 292.359;"
+                                    xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path d="M222.979,133.331L95.073,5.424C91.456,1.807,87.178,0,82.226,0c-4.952,0-9.233,1.807-12.85,5.424   c-3.617,3.617-5.424,7.898-5.424,12.847v255.813c0,4.948,1.807,9.232,5.424,12.847c3.621,3.617,7.902,5.428,12.85,5.428   c4.949,0,9.23-1.811,12.847-5.428l127.906-127.907c3.614-3.613,5.428-7.897,5.428-12.847   C228.407,141.229,226.594,136.948,222.979,133.331z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#ffffff" />
+                                        </g>
+                                    </g>
+                                </svg> Shows Episodes &nbsp; <span [innerHtml]="'('+show.count+')'"> </span>
+                            </button>
+                        </h5>
+                        <div class="">
+                            <div class="uploadBtn">
+                                <!-- <input type="file" multiple accept="video/mp4" formArrayName='pheripheralVideo' (change)="changeVideo($event, 'mediaList')"> -->
+                                <input type="file" multiple accept="video/mp4" (change)="changeVideo($event, 'uploadList', show.count, 'episode/main-video',
+                            'show')">
+                                <!-- <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="50px" height="25px" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve"><g><g>
+                                            <g id="attachment">
+                                                <path d="M140.25,395.25C63.75,395.25,0,331.5,0,255s63.75-140.25,140.25-140.25H408c56.1,0,102,45.9,102,102    c0,56.1-45.9,102-102,102H191.25c-35.7,0-63.75-28.05-63.75-63.75s28.05-63.75,63.75-63.75H382.5v38.25H191.25    c-15.3,0-25.5,10.2-25.5,25.5s10.2,25.5,25.5,25.5H408c35.7,0,63.75-28.05,63.75-63.75S443.7,153,408,153H140.25    c-56.1,0-102,45.9-102,102c0,56.1,45.9,102,102,102H382.5v38.25H140.25z" data-original="#000000" class="active-path" fill="#000000"/>
+                                            </g>
+                                        </g></g> </svg>
+                                </span>-->
+                                <span class="d-flex justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                                        viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"
+                                        width="12px" height="12px" class="mr-2">
+                                        <g>
+                                            <g>
+                                                <g>
+                                                    <path d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                            <g>
+                                                <g>
+                                                    <polygon points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>UPLOAD SHOW EPISODE</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="shows-videos" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body row">
+                            <app-video-detail-card class="videoCard col-lg-3 col-xs-6 mb-4 " [videoDetail]="{'title': item.sourceLink, 'duration':item.duration }"
+                                [videoThumbnail]="s3Url['basePath']+s3Url['episodePath']+'/horizontal/'+item['thumbnail']"
+                                *ngFor="let item of show.list | slice:0: show.sliceLimit; let
+                            i=index"></app-video-detail-card>
+                            <!-- Show More Videos Button -->
+                            <div class="shMore__Videos">
+                                <button type="button" class="btn" *ngIf="show.count > show.sliceLimit" (click)="setSliceLimit('show',show.count);">Show
+                                    More</button>
+                            </div>
+                            <!-- ./Show More Videos Button -->
+                        </div>
+                    </div>
+                </div>
+                <!--/ show video list -->
+
+                <!-- individual episodes list -->
+                <div class="card">
+                    <div class="d-flex justify-content-between align-items-center" id="headingThree">
+                        <h5>
+                            <button class="btn collapsed" data-toggle="collapse" id="individual-videos-section"
+                                data-target="#individual-videos" aria-expanded="false" aria-controls="individual-videos"
+                                (click)="getVideoList('individual', searchText, '')">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1" class="mr-3 arrowButton" id="Capa_1" x="0px" y="0px" width="15px"
+                                    height="15px" viewBox="0 0 292.359 292.359" style="enable-background:new 0 0 292.359 292.359;"
+                                    xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path d="M222.979,133.331L95.073,5.424C91.456,1.807,87.178,0,82.226,0c-4.952,0-9.233,1.807-12.85,5.424   c-3.617,3.617-5.424,7.898-5.424,12.847v255.813c0,4.948,1.807,9.232,5.424,12.847c3.621,3.617,7.902,5.428,12.85,5.428   c4.949,0,9.23-1.811,12.847-5.428l127.906-127.907c3.614-3.613,5.428-7.897,5.428-12.847   C228.407,141.229,226.594,136.948,222.979,133.331z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#ffffff" />
+                                        </g>
+                                    </g>
+                                </svg> Individual Videos &nbsp; <span [innerHtml]="'(' +individual.count+ ')'"> </span>
+                            </button>
+                        </h5>
+                        <div class="">
+                            <div class="uploadBtn">
+                                <!-- <input type="file" multiple accept="video/mp4" formArrayName='pheripheralVideo' (change)="changeVideo($event, 'mediaList')"> -->
+                                <input type="file" multiple accept="video/mp4" (change)="changeVideo($event, 'uploadList', individual.count, 'episode/main-video',
+                              'individual')">
+                                <!-- <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="50px" height="25px" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve"><g><g>
+                                            <g id="attachment">
+                                                <path d="M140.25,395.25C63.75,395.25,0,331.5,0,255s63.75-140.25,140.25-140.25H408c56.1,0,102,45.9,102,102    c0,56.1-45.9,102-102,102H191.25c-35.7,0-63.75-28.05-63.75-63.75s28.05-63.75,63.75-63.75H382.5v38.25H191.25    c-15.3,0-25.5,10.2-25.5,25.5s10.2,25.5,25.5,25.5H408c35.7,0,63.75-28.05,63.75-63.75S443.7,153,408,153H140.25    c-56.1,0-102,45.9-102,102c0,56.1,45.9,102,102,102H382.5v38.25H140.25z" data-original="#000000" class="active-path" fill="#000000"/>
+                                            </g>
+                                        </g></g> </svg>
+                                </span>-->
+                                <span class="d-flex justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                                        viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"
+                                        width="12px" height="12px" class="mr-2">
+                                        <g>
+                                            <g>
+                                                <g>
+                                                    <path d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                            <g>
+                                                <g>
+                                                    <polygon points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>UPLOAD INDIVIDUAL</span>
+                            </div>
+                            <!-- <div class="progress mt-2">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div id="individual-videos" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body row">
+                            <app-video-detail-card class="videoCard col-lg-3 col-xs-6 mb-4 " [videoDetail]="{'title': item.sourceLink, 'duration':item.duration }"
+                                [videoThumbnail]="s3Url['basePath']+s3Url['episodePath']+'/horizontal/'+item['thumbnail']"
+                                *ngFor="let item of individual.list | slice:0: individual.sliceLimit; let
+                              i=index"></app-video-detail-card>
+                            <!-- Show More Videos Button -->
+                            <div class="shMore__Videos">
+                                <button type="button" class="btn" *ngIf="individual.count > individual.sliceLimit"
+                                    (click)="setSliceLimit('individual',individual.count);">Show More</button>
+                            </div>
+                            <!-- ./Show More Videos Button -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /individual episodes list -->
+
+                <!-- collection episodes list -->
+                <div class="card">
+                    <div class="d-flex justify-content-between align-items-center" id="headingFour">
+                        <h5>
+                            <button class="btn collapsed" data-toggle="collapse" id="collection-peripheral-section"
+                                data-target="#collection-peripheral" aria-expanded="false" aria-controls="collection-peripheral"
+                                (click)="getVideoList('collection', searchText, '')">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1" class="mr-3 arrowButton" id="Capa_1" x="0px" y="0px" width="15px"
+                                    height="15px" viewBox="0 0 292.359 292.359" style="enable-background:new 0 0 292.359 292.359;"
+                                    xml:space="preserve">
+                                    <g>
+                                        <g>
+                                            <path d="M222.979,133.331L95.073,5.424C91.456,1.807,87.178,0,82.226,0c-4.952,0-9.233,1.807-12.85,5.424   c-3.617,3.617-5.424,7.898-5.424,12.847v255.813c0,4.948,1.807,9.232,5.424,12.847c3.621,3.617,7.902,5.428,12.85,5.428   c4.949,0,9.23-1.811,12.847-5.428l127.906-127.907c3.614-3.613,5.428-7.897,5.428-12.847   C228.407,141.229,226.594,136.948,222.979,133.331z"
+                                                data-original="#000000" class="active-path" data-old_color="#000000"
+                                                fill="#ffffff" />
+                                        </g>
+                                    </g>
+                                </svg> Collection Peripheral &nbsp; <span [innerHtml]="'(' + collection.count + ')'">
+                                </span>
+                            </button>
+                        </h5>
+                        <div class="">
+                            <div class="uploadBtn">
+                                <!-- <input type="file" multiple accept="video/mp4" formArrayName='pheripheralVideo' (change)="changeVideo($event, 'mediaList')"> -->
+                              <input type="file" multiple accept="video/mp4" (change)="changeVideo($event, 'uploadList', collection.count, 'collection/main-video',
+                              'collection')">
+                                <!-- <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="50px" height="25px" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve"><g><g>
+                                            <g id="attachment">
+                                                <path d="M140.25,395.25C63.75,395.25,0,331.5,0,255s63.75-140.25,140.25-140.25H408c56.1,0,102,45.9,102,102    c0,56.1-45.9,102-102,102H191.25c-35.7,0-63.75-28.05-63.75-63.75s28.05-63.75,63.75-63.75H382.5v38.25H191.25    c-15.3,0-25.5,10.2-25.5,25.5s10.2,25.5,25.5,25.5H408c35.7,0,63.75-28.05,63.75-63.75S443.7,153,408,153H140.25    c-56.1,0-102,45.9-102,102c0,56.1,45.9,102,102,102H382.5v38.25H140.25z" data-original="#000000" class="active-path" fill="#000000"/>
+                                            </g>
+                                        </g></g> </svg>
+                                </span>-->
+                                <span class="d-flex justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                                        viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"
+                                        width="12px" height="12px" class="mr-2">
+                                        <g>
+                                            <g>
+                                                <g>
+                                                    <path d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                            <g>
+                                                <g>
+                                                    <polygon points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                        data-original="#000000" class="active-path" data-old_color="#000000"
+                                                        fill="#FFFFFF" />
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>UPLOAD COLLECTIONS PERIPHERAL</span>
+                            </div>
+                            <!-- <div class="progress mt-2">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div id="collection-peripheral" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                        <div class="card-body row">
+
+                            <app-video-detail-card class="videoCard col-lg-3 col-xs-6 mb-4 " [videoDetail]="{'title': item.sourceLink, 'duration':item.duration }"
+                                [videoThumbnail]="s3Url['basePath']+s3Url['collectionPath']+'/horizontal/'+item['thumbnail']"
+                                *ngFor="let item of collection.list | slice:0: collection.sliceLimit; let
+                              i=index"></app-video-detail-card>
+                            <!-- Show More Videos Button -->
+                            <div class="shMore__Videos">
+                                <button type="button" class="btn" *ngIf="collection.count > collection.sliceLimit"
+                                    (click)="setSliceLimit('collection',collection.count);">Show More</button>
+                            </div>
+                            <!-- ./Show More Videos Button -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /collection episodes list -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <app-upload-video></app-upload-video> -->

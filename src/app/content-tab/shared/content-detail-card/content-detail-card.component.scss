@@ -1,0 +1,279 @@
+ .artistWrapper{
+    border-radius: 12px;
+    border: solid 2px rgba(177, 177, 177, 0.7);
+    padding: 0px;
+    margin-top: 16px;
+    position: relative;
+    @media only screen and(min-width:1401px){
+        min-height: 206px;
+    }
+    &.active{
+        border: 2px solid #7a0600;
+    }
+    &:hover{
+        border: 2px solid #7a0600;
+        .view-detail {
+            display: block;
+        }
+    }
+    .view-detail {
+        display: none;
+    }
+    .artist_card{
+        border-bottom: 1px solid rgba(177, 177, 177, 0.7);
+        padding: 8px 8px 12px 8px;
+        .artistImg{
+            border-radius: 8px;
+            border: solid 1px #b1b1b1;
+            // padding: 28px;
+            min-width: 120px;
+            height: auto;
+            // width: 100%;
+            overflow: hidden;
+            // img{
+            //     // height: 63px;
+            // }
+            .sqrImg{
+                padding-top: 100%;
+                border-radius: 8px;
+                z-index: 2;
+                position: relative;
+                width: 100%;
+                height: 0;
+                display: block;
+                color: #fff;
+                img{
+                    height: 100%;
+                    left: 0px;
+                    position: absolute;
+                    top: 0px;
+                    width: 100%;
+                    border-radius: 8px;
+                    -o-object-fit: cover;
+                    object-fit: cover;
+                }
+            }
+        }
+        .artistCardDt{
+            margin-left: 8px;
+            .artName_Location{
+                h6{
+                    font-size: 16px;
+                    font-size: .87em;
+                    color: #7a0600;
+                    font-weight: 600;
+                    line-height: normal;
+                    margin-bottom: 4px!important;
+                    max-width: 200px;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    min-height: 40px;
+                    overflow: hidden;
+                    word-break: break-all;
+                }
+                p{
+                    font-size: 14px;
+                    color: #191919;
+                    font-weight: 600;
+                    line-height: normal;
+                }
+            }
+            .langDt{
+                margin-top: 15px;
+                p{
+                    font-size: 12px;
+                    color: #191919;
+                    font-weight: 300;
+                }
+                .selLang {
+                    margin-top: 4px;
+                    &.cCheckbox{
+                        .styled-checkbox{
+                            & + label{
+                                font-size: 14px;
+                                font-weight: normal;
+                            }
+                        &:checked + label:after{
+                            top: 10.5px;
+                            left: 2px;
+                        }
+                        & + label:before{
+                            width: 12px;
+                            height: 12px;
+                        }
+                        &:checked + label:after{
+                            box-shadow: 
+                            0px 0px 0px white, 
+                            2px 0 0 white, 
+                            2px -2px 0 white, 
+                            2px -4px 0 white, 
+                            2px -6px 0 white;
+                        }
+                        }
+                    }
+                }
+            }
+            .pointer-event {
+                pointer-events: none;
+           }
+        }
+    }
+    .completed_Review{
+        padding: 8px;
+        padding-right: 0px;
+        .artreviewer{
+            h6{
+                font-size: 12px;
+                font-weight: 600;
+                line-height: normal;
+                &:first-child{
+                    color: #7a0600;
+                }
+                &:last-child{
+                    color:#0d9dc9;
+                }
+            }
+            p{
+                color: #191919;
+                font-size: 12px;
+                font-weight: 300;
+                line-height: normal;
+            }
+            button.view-detail{
+                background: #7a0600;
+                color: #fff;
+                text-transform: uppercase;
+                border-radius: 35px;
+                padding: 8px 18px;
+                font-size: 12px;
+                font-weight: 600;
+                border: none;
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: auto;
+            }
+        }
+        .id_more{
+            h6{
+                font-size: 14px;
+                color: #191919;
+                font-weight: 200;
+                line-height: normal;
+            }
+        }
+    }
+    // .cCheckbox{
+        // &.artcrd{
+    .cCheckbox.artcrd {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        .styled-checkbox{
+            & + label{
+                font-size: 14px;
+                font-weight: normal;
+            }
+        &:checked + label:after{
+            top: 10.5px;
+            left: 7px;
+        }
+        & + label:before{
+            width: 24px;
+            height: 24px;
+            border-radius:50%;
+            margin-right: 0px;
+        }
+        // &:checked + label:after{
+        //     box-shadow: 
+        //     0px 0px 0px white, 
+        //     2px 0 0 white, 
+        //     2px -2px 0 white, 
+        //     2px -4px 0 white, 
+        //     2px -6px 0 white;
+        // }
+        }
+    }
+}
+
+// check box
+
+.cCheckbox{
+    .styled-checkbox {
+        position: absolute; 
+        opacity: 0; 
+      
+        & + label {
+          position: relative;
+          cursor: pointer;
+          padding: 0;
+          color: #191919;
+          opacity: 0.7;
+          font-weight: 600;
+        }
+      
+        // Box.
+        & + label:before {
+          content: '';
+          margin-right: 6px;
+          display: inline-block;
+          vertical-align: text-top;
+          width: 18px;
+          height: 18px;
+          background: white;
+          border: 1px solid #191919;
+        }
+      
+        // Box hover
+        // &:hover + label:before {
+        //   background: #7a0600;
+        // }
+        
+        // Box focus
+        // &:focus + label:before {
+        //   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+        // }
+      
+        // Box checked
+        &:checked + label:before {
+          background: #7a0600;
+          border: 1px solid #7a0600;
+        }
+        &:checked + label{
+            color: #7a0600;
+            opacity: 1;
+        }
+        
+        // Disabled state label.
+        &:disabled + label {
+          color: #b8b8b8;
+          cursor: auto;
+        }
+      
+        // Disabled box.
+        &:disabled + label:before {
+          box-shadow: none;
+          background: #ddd;
+        }
+      
+        // Checkmark. Could be replaced with an image
+        &:checked + label:after {
+          content: '';
+          position: absolute;
+          left: 4px;
+          top: 11px;
+          background: white;
+          width: 2px;
+          height: 2px;
+          box-shadow: 
+            2px 0 0 white,
+            4px 0 0 white,
+            4px -2px 0 white,
+            4px -4px 0 white,
+            4px -6px 0 white,
+            4px -8px 0 white;
+          transform: rotate(45deg);
+        }
+      }
+}

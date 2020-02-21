@@ -1,0 +1,595 @@
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb" class="addArBread">
+            <ol class="breadcrumb pl-0">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="" [routerLink]="formType=='add'? ['../listing/show'] : ['../../listing/show']">Show</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> <a [innerHtml]="formType+ ' Show'"></a></li>
+            </ol>
+        </nav>
+        <div class="topSection d-flex justify-content-between align-items-center w-100">
+            <div class="addArtistTabs">
+                <ul class="nav nav-pills mb-0"  role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link" [class.enable]="selectedLang == 'english' || formStatus.english" [class.active]="selectedLang == 'english'" (click)="changeSelectedLang('english')">English</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" [disabled]="!formStatus.english" [class.enable]="selectedLang == 'hindi'" [class.active]="selectedLang == 'hindi'"  (click)="changeSelectedLang('hindi')">Hindi</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="control_btns">
+                <ul class="list-unstyled mb-0" *ngIf="currentUrl == 'review-publish'">
+                    <li>
+                        <button type="button" class="btn rounded-pill" (click)="sendToCorrection('draft', 'show')">Send to Correction</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn rounded-pill" [routerLink]="formType=='add'? ['../listing/review'] : ['../../listing/review']" [queryParams]="{ type: 'show'}">Close</button>
+                    </li>
+                    <li>
+                        <!-- <button type="button" class="btn rounded-pill" (click)="saveApiCall(selectedLang, 'draft')">Save</button> -->
+                        <button type="button" class="btn rounded-pill" (click)="saveApiCall(selectedLang, storedData[selectedLang].status)">Save</button>
+                    </li>
+                </ul>
+                <ul class="list-unstyled mb-0" *ngIf="currentUrl == 'content'">
+                    <li>
+                        <button type="button" class="btn rounded-pill">Preview</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn rounded-pill" [routerLink]="formType=='add'? ['../listing/show'] : ['../../listing/show']">Discard</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn rounded-pill" (click)="saveApiCall(selectedLang, 'draft')">Save</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab-conteContent w-100">
+            <!-- English -->
+            <div class="tab-pane fade show active">
+                <p style="color: #fff;" class="d-none">English content</p>
+                <!-- Create Show -->
+                <form [formGroup]="tForm">
+                    <div class="createShowWrap" [formGroup]="tForm.controls[selectedLang]">
+                        <div class="createShow">
+                            <div class="form-group">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label>Show Name*</label>
+                                    <p class="mb-0">{{tForm.get(selectedLang+'.title').value.length}} /
+                                        <span>50 </span></p>
+                                </div>
+                                <input type="text" class="form-control" maxlength="50" formControlName="title" aria-describedby="" (blur)="checkSlugApi()">
+                                <small id="emailHelp" class="form-text txt_color_primary" *ngIf="tForm.get(selectedLang+'.slug').touched && !tForm.get('english.slug').value">Title already exist.</small>
+                            </div>
+                            <div class="form-group desc__create">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label>Show Description*</label>
+                                    <p class="mb-0">{{tForm.get(selectedLang+'.description').value.length}} /
+                                        <span>500 </span></p>
+                                </div>
+                                <textarea rows="5" class="form-control" maxlength="500" formControlName="description"></textarea>
+                            </div>
+
+                            <div class="createShowLabel">
+                                <h6 class="mb-0">Primary Dialect*</h6>
+
+                                <div class="form-group">
+                                    <input type="radio" name="language" value="har" id="har" formControlName="language"
+                                        (change)="copyDataFromOneLangToOther('language')" />
+                                    <label for="har" class="mb-0 text-capitalize">Haryanvi</label>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <input type="radio" name="language" value="hin" id="hin" formControlName="language"
+                                        (change)="copyDataFromOneLangToOther('language')" />
+                                    <label for="hin" class="mb-0 text-capitalize">Hindi</label>
+                                </div>
+                            </div>
+
+                            <!-- Add Seasons Working on this part now mrinal -->
+
+                            <div class="seasons__show">
+                                <h4 class="mb-4">Seasons</h4>
+                                <ul class="nav nav-tabs mb-3 position-relative" id="myTab" role="tablist">
+                                    <li class="nav-item" *ngFor="let item of seasonFields(selectedLang).controls; let pointIndex=index">
+                                       
+                                        <a class="nav-link" [class.active]="seasonDetail[selectedLang].selectedTab==pointIndex" [id]="'season'+pointIndex" data-toggle="tab" 
+                                           style="cursor: pointer;" role="tab" [attr.aria-controls]="'season'+pointIndex" aria-selected="true" (click)="seasonDetail[selectedLang].selectedTab=pointIndex">
+                                           <span [innerHtml]="'Season'+(pointIndex+1)"></span>
+                                           <span style="top: 17px;
+                                           width: 8px;
+                                           height: 8px;
+                                           border-radius: 9px;
+                                           background: red;
+                                           position: absolute;" *ngIf="item.invalid"></span>
+                                        </a>
+                                    </li>
+                                    
+                                    <div class="addSeason position-absolute" style="right: 0px;" *ngIf="selectedLang == 'english'">
+                                        <button class="openPopUp roundedBtn d-inline" type="button" (click)="addSeasonFields(selectedLang)">+ ADD SEASON</button>
+                                        <span class="ml-2" > ...</span>
+                                    </div>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <ng-container formArrayName="seasons" >
+                                        <div class="tab-pane fade show" [class.active]="seasonDetail[selectedLang].selectedTab==pointIndex"  [id]="'seasonTab'+pointIndex" role="tabpanel"
+                                            [attr.aria-labelledby]="'seasonTab'+pointIndex" *ngFor="let item of seasonFields(selectedLang).controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                            <ng-container  *ngIf="seasonDetail[selectedLang].selectedTab==pointIndex">
+                                                <div class="form-group">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <label for="showName">Season Title*</label>
+                                                        <p class="mb-0"><span *ngIf="!!seasonFields(selectedLang).value[pointIndex]['title']">{{seasonFields(selectedLang).value[pointIndex]['title'].length}}</span> / <span>50 </span></p>
+                                                    </div>
+                                                    <input type="text" maxlength="50" formControlName="title" class="form-control w-75" (change)="checkSeasonSlugApi(pointIndex)">
+                                                    <small id="emailHelp" class="form-text txt_color_primary" *ngIf="seasonFields('english')['controls'][pointIndex]['controls']['slug'].touched && !seasonFields(selectedLang).value[pointIndex]['slug']">Title already exist.</small>
+                                                </div>
+
+                                                <div class="form-group desc__create">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <label for="desc">Season Description*</label>
+                                                        <p class="mb-0"><span *ngIf="!!seasonFields(selectedLang).value[pointIndex]['description']">{{seasonFields(selectedLang).value[pointIndex]['description'].length}}</span> / <span>500 </span></p>
+                                                    </div>
+                                                    <textarea rows="5" maxlength="500" formControlName="description" class="form-control"></textarea>
+                                                </div>
+
+                                                <div class="createShowLabel">
+                                                    <h6 class="mb-0">Label*</h6>
+                                                    <div class="form-group" *ngFor="let item of labels">
+                                                        <!-- (change)="copyDataFromOneLangToOther('label')" -->
+                                                        <input type="radio" [formControlName]="'label'" [value]="item" [id]="item.english" (change)="copySeasonDataFromOneLangToOther('label', pointIndex)" />
+                                                        <label [for]="item.english" class="mb-0 text-capitalize" [innerHtml]="item[selectedLang]"></label>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="createShowCate" *ngIf="viewDataLoaded && seasonDetail[selectedLang].selectedTab==pointIndex">
+                                                    <h6 class="mb-0">Category*</h6>
+                                                    <ng-container *ngFor="let item of categoryList; let categoryIndex=index" [formArrayName]="'categoryList'">
+                                                        <div class="form-group" [formGroupName]="categoryIndex">
+                                                            <input type="checkbox" [formControlName]="'checked'" [id]="'category'+pointIndex+item[selectedLang].id" (change)="copyCategoryDataToAnother(pointIndex)" />
+                                                            <label [for]="'category'+pointIndex+item[selectedLang].id" class="mb-0 text-capitalize" [innerHtml]="item[selectedLang].name"></label>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+
+                                                <div class="createShowTags">
+                                                    <label for="tags" class="">Tags*</label>
+                                                    <div class="force-to-the-bottom">
+                                                        <tag-input formControlName="tags" class="custom__tag__field" modelAsStrings="true" placeholder="Enter tags here..." secondaryPlaceholder="Enter tags here..." (onBlur)="copySeasonDataFromOneLangToOther('tags', pointIndex)">
+                                                        </tag-input>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Show Genre -->
+                                                <ng-container *ngIf="!!allGenreList.season['season'+(pointIndex+1)] && viewDataLoaded==true">
+                                                    <app-genre-subgenre-list [seasonIndex]="(pointIndex+1)" [selectedData]="allGenreList.season['season'+(pointIndex+1)].selectedData" [langType]="selectedLang" (updateGenreList)="updateGenreToOTher($event, pointIndex+1)" [genreList]="allGenreList.allListData"></app-genre-subgenre-list>
+                                                    {{allGenreList.season['season'+(pointIndex+1)]['formData']['dSubGenreList'][selectedLang].length>0 }}
+                                                </ng-container>
+                                                <!-- /Show Genre -->
+
+
+                                                <!-- season thumbnail -->
+                                                <div class="showThumbnail">
+                                                    <h6>Season Thumbnails*</h6>
+                                                    <div class="row">
+                                                        <div class="col-lg-4" formGroupName="horizontal_large">
+                                                            <div class="thumbnail16_9">
+                                                                <div style="height: 0; padding-top: 56.25%;display: block;color: #fff; position: relative; z-index: 1;">
+                                                                    <img *ngIf="!!seasonFields(this.selectedLang).value[pointIndex]['horizontal_large']['imgUrl']" [src]="seasonFields(this.selectedLang).value[pointIndex]['horizontal_large']['imgUrl']" class="img-fluid"
+                                                                        style="height: 100%;left: 0; position: absolute; top: 0; width: 100%; -o-object-fit: cover; object-fit: cover;" />
+                    
+                                                                    <!-- Upload Image -->
+                                                                    <div *ngIf="!seasonFields(this.selectedLang).value[pointIndex]['horizontal_large']['imgUrl']"
+                                                                        class="uploadArtImg uploadBtn d-flex flex-column justify-content-between">
+                                                                        <input type="file" accept="image/jpeg" formControlName="sourceLink" (change)="changeShowImage($event, 'horizontal_large', pointIndex, 16, 9)">
+                                                                        <span class="mb-2">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                                                                id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
+                                                                                style="enable-background:new 0 0 512 512;"
+                                                                                xml:space="preserve" width="24px" height="24px">
+                                                                                <g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <path
+                                                                                                d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                data-old_color="#000000" fill="#191919" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <polygon
+                                                                                                points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                data-old_color="#000000" fill="#191919" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                </g>
+                                                                            </svg>
+                                                                        </span>
+                                                                        <span>
+                                                                            UPLOAD IMAGE
+                                                                        </span>
+                                                                        <span>16:9</span>
+                                                                    </div>
+                                                                    <div class="progress" *ngIf="seasonFields(selectedLang).value[pointIndex]['horizontal_large']['progPer'] != null">
+                                                                        <div class="progress-bar progress-bar-success" role="progressbar" 
+                                                                        aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': seasonFields(selectedLang).value[pointIndex]['horizontal_large']['progPer']+'%'}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Upload Image -->
+                                                                </div>
+                                                            </div>
+                                                            <span *ngIf="seasonFields(selectedLang).value[pointIndex]['horizontal_large']['status'] == 'failed'" style="position: absolute; margin-top: 14px; color: red;">Error in image upload.</span>
+                                                            <div class="uploadBtn changeImg position-absolute">
+                                                                <input type="file" accept="image/jpeg" formControlName="sourceLink" (change)="changeShowImage($event, 'horizontal_large', pointIndex, 16, 9)">
+                                                                <span [innerHtml]="!!seasonFields(this.selectedLang).value[pointIndex]['horizontal_large']['imgUrl']? 'CHANGE': 'UPLOAD'"></span>  
+                                                            </div>
+                                                        </div>
+                    
+                                                        <div class="col-lg-4 pl-0"  formGroupName="square">
+                                                            <div class="thumbnail1_1">
+                                                                <div style="height: 0; padding-top: 100%;display: block;color: #fff; position: relative; z-index: 1;">
+                                                                    <img *ngIf="!!seasonFields(this.selectedLang).value[pointIndex]['square']['imgUrl']" [src]="seasonFields(this.selectedLang).value[pointIndex]['square']['imgUrl']"
+                                                                        class="img-fluid"
+                                                                        style="height: 100%;left: 0; position: absolute; top: 0; width: 100%; -o-object-fit: cover; object-fit: cover;" />
+                    
+                                                                    <div *ngIf="!seasonFields(this.selectedLang).value[pointIndex]['square']['imgUrl']"
+                                                                        class="uploadArtImg uploadBtn d-flex flex-column justify-content-between">
+                                                                        <input type="file" accept="image/jpeg" formControlName="sourceLink" (change)="changeShowImage($event, 'square', pointIndex, 1, 1)">
+                                                                        <span class="mb-2">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                                                                id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
+                                                                                style="enable-background:new 0 0 512 512;"
+                                                                                xml:space="preserve" width="24px" height="24px">
+                                                                                <g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <path
+                                                                                                d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                data-old_color="#000000" fill="#191919" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <polygon
+                                                                                                points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                data-old_color="#000000" fill="#191919" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                </g>
+                                                                            </svg>
+                                                                        </span>
+                                                                        <span>
+                                                                            UPLOAD IMAGE
+                                                                        </span>
+                                                                        <span>1:1</span>
+                                                                    </div>
+                                                                    <div class="progress" *ngIf="seasonFields(selectedLang).value[pointIndex]['square']['progPer'] != null">
+                                                                        <div class="progress-bar progress-bar-success" role="progressbar" 
+                                                                        aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': seasonFields(selectedLang).value[pointIndex]['square']['progPer']+'%'}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <span *ngIf="seasonFields(selectedLang).value[pointIndex]['square']['status'] == 'failed'" style="position: absolute; margin-top: 14px; color: red;">Error in image upload.</span>
+                                                            <div class="uploadBtn changeImg position-absolute">
+                                                                <input type="file" accept="image/jpeg" formControlName="sourceLink" (change)="changeShowImage($event, 'square', pointIndex, 1, 1)">
+                                                                <span [innerHtml]="!!seasonFields(this.selectedLang).value[pointIndex]['square']['imgUrl']? 'CHANGE': 'UPLOAD'"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /season thumbnail -->
+
+                                                <!-- gradient -->
+                                                <div class="color__createShow mt-5" *ngIf="!!imageGradientColor.season['season'+(pointIndex+1)]">
+                                                    <div class="row">
+                                                        <div class="colorBox col-lg-4">
+                                                            <label for="color">Color*</label>
+                                                            <div class="form-control" style="width: 100%; min-height: 100px;" [ngStyle]="{'backgroundColor':seasonFields(this.selectedLang).value[pointIndex]['gradient']}">
+                                                            </div>
+
+                                                            <div class="cstColor d-flex">
+                                                                <p class="mb-0" [innerHtml]="seasonFields(selectedLang).value[pointIndex]['gradient']"></p>
+                                                                <div class="colorPicker btn">
+                                                                    <input type="color" formControlName="gradient" name="gradient.value" [id]="'colorPicker'+pointIndex" value="#ddd"  (change)="copySeasonDataFromOneLangToOther('gradient', pointIndex)"/> 
+                                                                    <label class="mb-0" [for]="'colorPicker'+pointIndex">CHANGE</label>
+                                                                </div>
+                                                            </div>
+
+                                                             <!-- Color Selection -->
+                                                             <ng-container *ngIf="!!imageGradientColor.season['season'+(pointIndex+1)][selectedLang]">
+                                                                 <div class="wrapSelColor d-flex" *ngIf="imageGradientColor.season['season'+(pointIndex+1)][selectedLang].length > 0">
+                                                                     <div class="SelColor" *ngFor="let color of imageGradientColor.season['season'+(pointIndex+1)][selectedLang]">
+                                                                         <label class="colRadio" (click)="setImageColor(color, pointIndex);" [ngStyle]="{'backgroundColor':color}">
+                                                                             <input type="radio" [checked]="color == seasonFields(this.selectedLang).value[pointIndex]['gradient']" name="radio"
+                                                                             class="radioButton">
+                                                                             <span class="checkmark"></span>
+                                                                         </label>
+                                                                     </div>
+                                                                 </div>
+                                                             </ng-container>
+                                                            <!-- Color Selection /. -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /gradient -->
+
+                                                <!-- videos -->
+                                                <div class="videos__createShow">
+                                                    <h6>Videos</h6>
+                                                    <!-- peripheral listing -->
+                                                    <div class="trailerMore">
+                                                        <div class="ttl d-flex justify-content-between align-items-center">
+                                                            <h6>
+                                                                <span>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve" width="20px" height="20px"><g><g>
+                                                                            <g>
+                                                                                <path d="M465.875,215.583c-32.896-18.021-76.198-42.958-122.031-69.375C256.396,95.833,157.281,38.729,87.375,4.646    C81.01,1.563,74.281,0,67.385,0C41.99,0,21.333,20.521,21.333,45.729L21.354,256l-0.021,210.25    c0,25.229,20.656,45.75,46.052,45.75c6.927,0,13.656-1.583,20.021-4.688c69.948-34.104,169.177-91.271,256.719-141.708    c45.729-26.354,88.917-51.229,121.75-69.229c15.521-8.5,24.792-23.604,24.792-40.396    C490.667,239.188,481.396,224.083,465.875,215.583z" data-original="#000000" class="active-path" fill="#000000"/>
+                                                                            </g>
+                                                                        </g></g> 
+                                                                    </svg>
+                                                                </span>
+                                                                Trailer & More*
+                                                                <span [innerHtml]="'('+(!!videoList.season['season'+(pointIndex+1)].peripheralVideo.length==true?videoList.season['season'+(pointIndex+1)].peripheralVideo.length: 'no video')+')'"></span>
+                                                                <!-- <span class="noVideos_Msg"> (No Video)</span> -->
+                                                            </h6>
+                                                            <!-- data-toggle="modal" data-target=".peripheral_modal" -->
+                                                            <button  *ngIf="!!videoList.season['season'+(pointIndex+1)].peripheralVideo && (videoList.all.dataLoadedPeripheral || videoList.season['season'+(pointIndex+1)].peripheralVideo.length > 0)" type="button" class="openPopUp roundedBtn rounded-pill"   data-backdrop="static" (click)="showHideVideoListPopup('peripheral', pointIndex+1)">+ <span [innerHtml]="videoList.season['season'+(pointIndex+1)].peripheralVideo.length == 0 ? 'ADD PERIPHERAL': 'ADD/EDIT PERIPHERAL'"></span></button>
+                                                        </div>
+                                                        <div class="row" *ngIf="videoList.season['season'+(pointIndex+1)].peripheralVideo.length > 0">
+                                                            <div class="uploaded_story col-lg-4 position-relative" *ngFor="let item of videoList.season['season'+(pointIndex+1)].peripheralVideo; let i = index;">
+                                                                <div class="stryThumbnail_wrap">
+                                                                    <div class="stryThumbnail" >
+                                                                        <!-- [defaultImage]="'../../assets/images/2.jpeg'" -->
+                                                                        <img  [lazyLoad]="s3Url['basePath']+s3Url['showPath']+constantImg.horizontalSmall+item[selectedLang]['thumbnail']['horizontal']['sourceLink']" alt="" class="img-fluid" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="stryDt d-flex justify-content-between align-items-center">
+                                                                    <div class="ttlDuration">
+                                                                        <h6 class="mb-0" [innerHtml]="item[selectedLang]['title']"></h6>
+                                                                        <p class="mb-0">Duration : <span [innerHtml]="item.duration | timeFormatter"></span> min</p>
+                                                                    </div>
+                                                                    <div class="ellIc dDown">
+                                                                        <a href="javascript:void(0);" id="downLink_1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                                                                id="Layer_1" x="0px" y="0px" viewBox="0 0 384 384"
+                                                                                style="enable-background:new 0 0 384 384;" xml:space="preserve"
+                                                                                width="24px" height="24px">
+                                                                                <g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <circle cx="192" cy="42.667" r="42.667"
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                fill="#000000" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <circle cx="192" cy="192" r="42.667"
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                fill="#000000" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <circle cx="192" cy="341.333" r="42.667"
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                fill="#000000" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                </g>
+                                                                            </svg>
+                                                                        </a>
+                                                                        <div class="arrow_box dropdown-menu" aria-labelledby="downLink_1" style="transform: translate3d(0px, 50px, 0px);">
+                                                                            <a class="dropdown-item" href="javascript:void(0);" (click)="removeVideo('show-peripheral', i, item, 'season'+(pointIndex+1))">Remove</a>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div style="position: absolute; top: 10px; right: 20px;" *ngIf="currentUrl == 'review-publish'">
+                                                                        <input type="checkbox" [id]="'selectedPeripheral'+pointIndex+'-'+i"
+                                                                         (click)="changePeripheralStatus($event, pointIndex, i)" [checked]="item.selectedPeripheralStatus">
+                                                                        <label class="ml-2 mb-0 d-flex align-items-center" [for]="'selectedPeripheral'+pointIndex+'-'+i"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <app-video-binding-popup *ngIf="videoList.all.showperipheralVideo"
+                                                        [seasonIndex]="(pointIndex+1)"
+                                                        [activePopupTab]="videoList.activePopupTab"
+                                                        (updateEpisodeList)="updateEpisodeData('peripheral', $event, 'season'+(pointIndex+1), pointIndex)" 
+                                                        [selectedLang]="selectedLang" [showPopUp]="videoList.all.showperipheralVideo"
+                                                        [type]="{'videoType':'peripheral', screeType:'show'}" 
+                                                        [listing]=" videoList.all.peripheralVideo " 
+                                                        [selectedListing]="videoList.season['season'+(pointIndex+1)].peripheralVideo" 
+                                                        [indvArtistList]="individualArtistList"
+                                                        [s3Url]="s3Url">
+                                                        </app-video-binding-popup>
+                                                    </div>
+                                                    <!-- /peripheral listing -->
+                                                    <!-- episode listing -->
+                                                    <div class="Episodes" *ngIf="!!videoList.season['season'+(pointIndex+1)].collectionVideo">
+                                                        <div class="ttl d-flex justify-content-between align-items-center">
+                                                            <h6>
+                                                                <span>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve" width="20px" height="20px"><g><g>
+                                                                            <g>
+                                                                                <path d="M465.875,215.583c-32.896-18.021-76.198-42.958-122.031-69.375C256.396,95.833,157.281,38.729,87.375,4.646    C81.01,1.563,74.281,0,67.385,0C41.99,0,21.333,20.521,21.333,45.729L21.354,256l-0.021,210.25    c0,25.229,20.656,45.75,46.052,45.75c6.927,0,13.656-1.583,20.021-4.688c69.948-34.104,169.177-91.271,256.719-141.708    c45.729-26.354,88.917-51.229,121.75-69.229c15.521-8.5,24.792-23.604,24.792-40.396    C490.667,239.188,481.396,224.083,465.875,215.583z" data-original="#000000" class="active-path" fill="#000000"/>
+                                                                            </g>
+                                                                        </g></g> 
+                                                                    </svg>
+                                                                </span>
+                                                                Episodes*
+                                                                <span class="epi-count" [innerHtml]="'('+(!!videoList.season['season'+(pointIndex+1)].collectionVideo.length==true?videoList.season['season'+(pointIndex+1)].collectionVideo.length: 'no video')+')'"></span>
+                                    
+                                                            </h6>
+                                                            <div class="d-flex justify-content-center align-items-center" *ngIf="videoList.all.dataLoadedCollection || videoList.season['season'+(pointIndex+1)].collectionVideo.length > 0">
+                                                                <!-- <button type="button" class="roundedBtn nFill">RE-ORDER</button> -->
+                                                                <!-- data-toggle="modal"  data-target=".peripheral_modal" -->
+                                                                <button type="button" class="openPopUp roundedBtn"  data-backdrop="static" (click)="showHideVideoListPopup('episode', pointIndex+1)">+ <span [innerHtml]="videoList.season['season'+(pointIndex+1)].collectionVideo.length == 0 ? 'ADD EPISODE': 'ADD/EDIT EPISODE'"></span></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" *ngIf="videoList.season['season'+(pointIndex+1)].collectionVideo.length > 0">
+                                                            <div class="uploaded_story col-lg-4" *ngFor="let item of videoList.season['season'+(pointIndex+1)].collectionVideo; let i = index;">
+                                                                <div class="stryThumbnail_wrap">
+                                                                    <div class="stryThumbnail" >
+                                                                        <!-- [defaultImage]="'../../assets/images/2.jpeg'" -->
+                                                                        <img  [lazyLoad]="s3Url['basePath']+s3Url['episodePath']+constantImg.horizontalSmall+item[selectedLang]['thumbnail']['horizontal']['ratio1']['sourceLink']" alt="" class="img-fluid" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="stryDt d-flex justify-content-between align-items-center">
+                                                                    <div class="ttlDuration">
+                                                                        <h6 class="mb-0" [innerHtml]="item[selectedLang]['title']"></h6>
+                                                                        <p class="mb-0">Duration : <span [innerHtml]="item.duration | timeFormatter"></span> min</p>
+                                                                    </div>
+                                                                    <div class="ellIc dDown">
+                                                                        <a href="javascript:void(0);" id="downLink_1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                                                                id="Layer_1" x="0px" y="0px" viewBox="0 0 384 384"
+                                                                                style="enable-background:new 0 0 384 384;" xml:space="preserve"
+                                                                                width="24px" height="24px">
+                                                                                <g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <circle cx="192" cy="42.667" r="42.667"
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                fill="#000000" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <circle cx="192" cy="192" r="42.667"
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                fill="#000000" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                    <g>
+                                                                                        <g>
+                                                                                            <circle cx="192" cy="341.333" r="42.667"
+                                                                                                data-original="#000000" class="active-path"
+                                                                                                fill="#000000" />
+                                                                                        </g>
+                                                                                    </g>
+                                                                                </g>
+                                                                            </svg>
+                                                                        </a>
+                                                                        <div class="arrow_box dropdown-menu" aria-labelledby="downLink_1" style="transform: translate3d(0px, 50px, 0px);">
+                                                                            <a class="dropdown-item" href="javascript:void(0);" (click)="removeVideo('episode', i, item, 'season'+(pointIndex+1))">Remove</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- episode list popup -->
+                                                        <app-video-binding-popup *ngIf="videoList.all.showcollectionVideo"
+                                                        [seasonIndex]="(pointIndex+1)"
+                                                        [activePopupTab]="videoList.activePopupTab"
+                                                        (updateEpisodeList)="updateEpisodeData('episode', $event, 'season'+(pointIndex+1), pointIndex)" 
+                                                        [selectedLang]="selectedLang" [showPopUp]="videoList.all.showcollectionVideo"
+                                                        [type]="{'videoType':'episode', screeType:'show'}" 
+                                                        [listing]="videoList.all.collectionVideo" 
+                                                        [selectedListing]="videoList.season['season'+(pointIndex+1)].collectionVideo" 
+                                                        [indvArtistList]="individualArtistList"
+                                                        [s3Url]="s3Url">
+                                                        </app-video-binding-popup>
+                                                        <!-- / episode list popup -->
+                                                    </div>
+                                                    <!-- /episode listing -->
+                                                </div>
+                                                <!-- /videos -->
+
+                                                <!-- artist list -->
+                                                <div>
+                                                    <div class="metaTitle" *ngIf="!!showArtistList[selectedLang][pointIndex]">
+                                                        <!-- {{showArtistList[selectedLang][pointIndex] | json}} -->
+                                                        <label for="metatitle">Artist</label>
+                        
+                                                        <div style="margin-left:-6px; margin-right: -6px;">
+                                                            <div *ngFor="let item of showArtistList[selectedLang][pointIndex]" style="display: inline-block;
+                                                            padding: 10px;
+                                                            border: 1px solid #ddd;
+                                                            border-radius: 37px; margin-left:6px; margin-right: 6px;">
+                                                                <img [lazyLoad]="s3Url['basePath']+s3Url['artistPath']+constantImg.artistSmall+item['profilePic']" style="    border-radius: 50%;
+                                                                width: 35px;margin-left: 2px;">
+                                                                <span [innerHtml]="item.name"></span>
+                                                            </div>
+                                                            <p *ngIf="showArtistList[selectedLang][pointIndex].length == 0"> No artist selected</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--/ artist list -->
+
+                                            </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <!-- Add Seasons Working on this part now mrinal-->
+
+                        </div>
+                        <!-- Meta -->
+                        <div class="meta_Wrapper">
+                            <div class="metaTitle">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label for="metatitle">Meta Title</label>
+                                    <p class="mb-0">Remanining Characters :
+                                        <span>{{50 - tForm.get(selectedLang+'.metaTitle').value.length}} </span></p>
+                                </div>
+                                <input type="text" formControlName="metaTitle" maxlength="50" class="form-control" id="metatitle" />
+                            </div>
+                            <div class="metaTags">
+                                <label for="metaTags">Meta Tags</label>
+                                <div class="force-to-the-bottom">
+                                    <tag-input formControlName="metaKeyword" class="custom__tag__field" modelAsStrings="true" placeholder="Enter tags here..." secondaryPlaceholder="Enter tags here...">
+                                    </tag-input>
+                                </div>
+                            </div>
+                            <div class="metaDesc">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label for="metaDesc">Meta Description</label>
+                                    <p class="mb-0">Remaining Characters : <span>{{500 - tForm.get('english.metaDescription').value.length}} </span></p>
+                                </div>
+                                <textarea rows="3" maxlength="500" formControlName="metaDescription" class="form-control" id="metaDesc"></textarea>
+                            </div>
+                        </div>
+                        <!-- Meta ./ -->
+
+                        <!-- saveBtn -->
+                        <div class="saveBtnsWrap">
+                            <div class="saveBtns d-flex justify-content-end align-items-center" *ngIf="currentUrl == 'content'">
+                                <button type="submit" *ngIf="selectedLang == 'english'"  [disabled]="!formStatus.english" class="btn rounded-pill btn-danger" (click)="saveApiCall(selectedLang, 'completed')">SAVE & NEXT</button>
+                                <button type="submit" *ngIf="selectedLang == 'hindi'" [disabled]="!formStatus.hindi" class="btn rounded-pill btn-dange" (click)="saveApiCall(selectedLang, 'completed')">SUBMIT</button>
+                            </div>
+                            <div class="saveBtns d-flex justify-content-end align-items-center" *ngIf="currentUrl == 'review-publish'">
+                                <button type="submit" class="btn rounded-pill btn-danger" (click)="sendToCorrection('reviewed', 'show')">MARKED AS REVIEW</button>
+                                <button type="submit" class="btn rounded-pill btn-danger" (click)="saveApiCall(selectedLang, 'publish')">REVIEW ADD TO PUBLISH</button>
+                            </div>
+                        </div>
+                        <!-- saveBtn -->
+                    </div>
+                </form>
+                <!-- Create Show ./-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <app-video-binding-popup *ngIf="videoList.all.showperipheralVideo || videoList.all.showcollectionVideo"
+[activePopupTab]="videoList.activePopupTab"
+(updateEpisodeList)="updateEpisodeData(videoList.all.showperipheralVideo==true?'peripheral':'episode', $event)" 
+[selectedLang]="selectedLang" [showPopUp]="videoList.all.showperipheralVideo || videoList.all.showcollectionVideo"
+[type]="{'videoType': videoList.all.showperipheralVideo==true?'peripheral':'episode', screeType:'collection'}" 
+[listing]="videoList.all.showperipheralVideo==true ? videoList.all.peripheralVideo : videoList.all.collectionVideo" 
+[selectedListing]="videoList.all.showperipheralVideo==true ? videoList.selected.peripheralVideo : videoList.selected.collectionVideo" 
+[indvArtistList]="individualArtistList"
+[s3Url]="s3Url">
+</app-video-binding-popup> -->

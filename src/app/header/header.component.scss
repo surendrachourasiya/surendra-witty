@@ -1,0 +1,87 @@
+a{
+    color: #e0e0e0;
+    text-decoration: none;
+}
+// Header 
+header{
+    color: #e0e0e0;
+    font-size: 21px;
+    font-size: 1.1vw;
+    background-color: #7a0600;
+    padding: 8px 16px 0px;
+    // height: 148px;
+    .cmsHeader{
+        background-color: #7a0600;
+    }
+    .logo{
+        font-size: 36px;
+        font-size: 2vw;
+        margin-bottom: 45px;
+        font-weight: 600;
+    }
+    .loginInfo__cmsHeader{
+        text-align: right;
+        .cmsUserDt{
+            p{
+                font-weight: 300;
+            &:last-child{
+                font-size: 14px;
+            }
+            }
+        }
+    }
+    .userImg {
+
+        .dropdown-toggle{
+            top: -30px!important;
+            left: auto!important;
+            right: 0;
+            &::after{
+                display: inline-block;
+                margin-left: 0.255em;
+                vertical-align: 0.255em;
+                content: "";
+                border-top: 0;
+                border-right: 0.5em solid transparent;
+                border-bottom: 0.5em solid;
+                border-left: 0.5em solid transparent;
+                position: absolute;
+                top: -8px;
+                right: 13px;
+                color: #fff;
+            }
+            a{
+                color: #000;
+                &:focus{
+                    background: none;
+                }
+            }
+        }
+    }
+    .tabNav__cmsHeader{
+        ul{
+            li{
+                &:first-child{
+                    a{
+                        padding-left: 0px;
+                    }
+                }
+                a{
+                    padding-bottom:0px;
+                    line-height: normal;
+                    opacity: 0.7;
+                    border-bottom: 3px solid transparent;
+                    padding-bottom: 8px;
+                    &.active{
+                        background: none;
+                        font-weight: 600;
+                        opacity: 1;
+                        border-bottom: 3px solid #ffffff;
+                        border-radius: 0px;
+                    }
+                }
+            }
+        }
+    }
+}
+// Header End

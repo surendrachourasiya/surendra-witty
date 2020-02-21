@@ -1,0 +1,11 @@
+<p>file-upload works!</p>
+<label class="btn btn-default" style="color:antiquewhite">
+    <input type="file" (change)="selectFile($event)">
+  </label>
+  
+  <button class="btn btn-success" [disabled]="!selectedFiles" (click)="upload()">Upload</button>
+
+
+  <div class="w3-light-grey" style="margin-top:20px">
+    <div class="w3-green" style="height:24px;" [ngStyle]="{'width': progressPer+'%'}"></div>
+  </div>

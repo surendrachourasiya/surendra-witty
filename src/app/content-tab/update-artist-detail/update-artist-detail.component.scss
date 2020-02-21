@@ -1,0 +1,756 @@
+  
+// check box
+.cCheckbox{
+    .styled-checkbox {
+        position: absolute; 
+        opacity: 0; 
+      
+        & + label {
+          position: relative;
+          cursor: pointer;
+          padding: 0;
+          color: #7a0600;
+          font-weight: 600;
+        }
+      
+        // Box.
+        & + label:before {
+          content: '';
+          margin-right: 10px;
+          display: inline-block;
+          vertical-align: text-top;
+          width: 18px;
+          height: 18px;
+          background: white;
+          border: 1px solid #7a0600;
+        }
+      
+        // Box hover
+        &:hover + label:before {
+          background: #7a0600;
+        }
+        
+        // Box focus
+        // &:focus + label:before {
+        //   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+        // }
+      
+        // Box checked
+        &:checked + label:before {
+          background: #7a0600;
+        }
+        
+        // Disabled state label.
+        &:disabled + label {
+          color: #b8b8b8;
+          cursor: auto;
+        }
+      
+        // Disabled box.
+        &:disabled + label:before {
+          box-shadow: none;
+          background: #ddd;
+        }
+      
+        // Checkmark. Could be replaced with an image
+        &:checked + label:after {
+          content: '';
+          position: absolute;
+          left: 4px;
+          top: 11px;
+          background: white;
+          width: 2px;
+          height: 2px;
+          box-shadow: 
+            2px 0 0 white,
+            4px 0 0 white,
+            4px -2px 0 white,
+            4px -4px 0 white,
+            4px -6px 0 white,
+            4px -8px 0 white;
+          transform: rotate(45deg);
+        }
+      }
+}
+
+// ADD ARTIST
+
+.uploadBtn {
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: fit-content;
+    padding: 0px 16px;
+    font-size: 21px;
+    padding: 0px 40px;
+    color: #e0e0e0;
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;   
+        cursor: inherit;
+        display: block;
+    }
+}
+
+.addArBread{
+    ol{
+        background: none;
+        padding-top: 16px;
+        li{
+            a{
+                color: #e0e0e0;
+                opacity: 0.7;
+            }
+            text-transform: uppercase;
+            &.active, &.active a{
+                color: #FFF;
+                opacity: 1;
+            }
+        }
+        .breadcrumb-item + .breadcrumb-item::before{
+            content: '>';
+        }
+    }
+}
+.topSection{
+    border-bottom: 2px solid #FFF;
+    padding-bottom: 15px;
+    .addArtistTabs{
+        ul{
+            li{
+                a,
+                button{
+                    background: #333;
+                    border: 1px solid #979797;
+                    border-radius: 35px;
+                    color: #FFF;
+                    text-transform: uppercase;
+                    position: relative;
+                    font-weight: 600;
+                    height: 36px;
+                    line-height: 36px;
+                    padding: 0px 16px;
+                    &.enable{
+                        background: #FFF;
+                        color: #7a0600;
+                    }
+                    &.active{
+                        &::after{
+                            content: '';
+                            position: absolute;
+                            bottom: -18px;
+                            color: #FFF;
+                            left: 0px;
+                            right: 0px;
+                            margin: 0 auto;
+                            text-align: center; 
+                            background-image: url('/assets/images/ic_expand.svg');
+                            height:17px;
+                            background-repeat: no-repeat;
+                            width: 24px;
+                            z-index: 5;
+                        }
+                    }
+                }
+                &:first-child{
+                    margin-right: 15px;
+                }
+            }
+        }
+    }
+    .control_btns{
+        ul{
+            li{
+                display: inline-block;
+                margin-right: 15px;
+                button{
+                    background: none;
+                    border: 1px solid #FFF;
+                    color: #FFF;
+                    text-transform: uppercase;
+                    height: 36px;
+                    padding: 0px 16px;
+                }
+                &:last-child{
+                    margin-right: 0px;
+                button{
+                background: #7a0600;
+                }
+                }
+            }
+        }
+    }
+}
+.add_artist{
+    background-color: #ffffff;
+    padding: 20px;
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 12px;
+    color: #191919;
+    h6{
+        font-size: 21px;
+        font-weight: 600;
+    }
+    .leftSection__artist{
+        .artistImgWrap{
+            max-width: 440px;
+            border: 1px solid #b1b1b1;
+            border-radius: 12px;
+            .artistImg{
+                border: 1px solid #b1b1b1;
+                border-radius: 8px;
+                background-color: #fcfcfc;
+                .uploadArtImg.uploadBtn{
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    margin: auto;
+                    height: 100px;
+                    width: 100%;
+                    font-size: 24px;
+                    font-size: 1.31em;
+                    color: #191919;
+                    font-weight: 600;
+                    line-height: normal;
+                    opacity: 0.7;
+                }
+                .progress{
+                    height: .5rem;
+                    border-radius: 0px 0px 8px 8px;
+                    position: absolute;
+                    bottom: 0px;
+                    z-index: 9999;
+                    width: 100%;
+                }
+            }
+            .uploadBtn.changeImg{
+                background-color: #7a0600;
+                color:#ffffff;
+                border-radius: 16px;
+                font-size: 12px;
+                right: 0px;
+                bottom: 10px;
+                height: 28px;
+                padding: 6px 12px;
+            }
+        }
+        .textBox{
+            padding-right: 15px;
+            margin-top: 24px;
+            label{
+                font-size: 21px;
+                color: #191919;
+                font-weight: 600;
+            }
+        }
+        .cstColor{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            p{
+                font-size: 21px;
+                color: #191919;
+                font-weight: 600;
+            }
+            .colorPicker{
+                background-color: #7a0600;
+                color:#ffffff;
+                border-radius: 16px;
+                font-size: 12px;
+                // right: 0px;
+                // bottom: -32px;
+                height: 28px;
+                padding: 0px 12px;
+                display: flex;
+                align-items: center;
+                position: relative;
+                input[type="color"]{
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    min-width: 100%;
+                    min-height: 100%;
+                    font-size: 100px;
+                    text-align: right;
+                    filter: alpha(opacity=0);
+                    opacity: 0;
+                    outline: none;
+                    cursor: inherit;
+                    display: block;
+                }
+            }
+        }
+        .wrapSelColor{
+            .SelColor{
+                margin-top: 12px;
+                margin-right: 8px;
+                &:last-child{
+                    margin-right: 0px;
+                }
+                .colRadio {
+                    // display: block;
+                    position: relative;
+                    padding-left: 35px;
+                    margin-bottom: 12px;
+                    cursor: pointer;
+                    font-size: 22px;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    border: 1px solid #ccc;
+                    border-radius: 8px;
+                    padding: 8px;
+                    width: 81px;
+                    height: 73px;
+                    // margin-right: 8px;
+                    // &:last-child{
+                    //     margin-right: 0px;
+                    // }
+                  }
+                  
+                  /* Hide the browser's default radio button */
+                  .colRadio input {
+                    position: absolute;
+                    opacity: 0;
+                    cursor: pointer;
+                  }
+                  
+                  /* Create a custom radio button */
+                  .checkmark {
+                    position: absolute;
+                    top: 5px;
+                    left: 5px;
+                    height: 20px;
+                    width: 20px;
+                    border: 2px solid #7a0600;
+                    border-radius: 50%;
+                  }
+                  
+                  /* On mouse-over, add a grey background color */
+                  .colRadio:hover input ~ .checkmark {
+                    // background-color: #ccc;
+                    border: 2px solid #7a0600;
+                  }
+                  
+                  /* When the radio button is checked, add a blue background */
+                  .colRadio input:checked ~ .checkmark {
+                    background-color: #7a0600;
+                  }
+                  
+                  /* Create the indicator (the dot/circle - hidden when not checked) */
+                  .checkmark:after {
+                    content: "";
+                    position: absolute;
+                    display: none;
+                  }
+                  
+                  /* Show the indicator (dot/circle) when checked */
+                  .colRadio input:checked ~ .checkmark:after {
+                    display: block;
+                  }
+                  
+                  /* Style the indicator (dot/circle) */
+                  .colRadio .checkmark:after {
+                    content: "";
+                    position: absolute;
+                    left: 3px;
+                    top: 7px;
+                    background: white;
+                    width: 2px;
+                    height: 2px;
+                    box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white, 4px -8px 0 white;
+                    transform: rotate(45deg);
+                  }
+            }
+        }
+    }
+    .middleSection__artist{
+        input{
+            height: 43px;
+        }
+        .first_form,
+        .middle_form,
+        .Last_form,
+        .stageName_form,
+        .city_form,
+        .state_form,
+        .dialect_form{
+            margin-top: 24px;
+            width: 50%;
+            label{
+                font-size: 21px;
+                font-size: 1.12em;
+                color: #191919;
+                font-weight: 600;                 
+            }           
+        }
+        .middle_form, .state_form{
+            margin-left: 15px;
+        }
+        fieldset {
+            margin: 0; 
+            // padding: 2rem; 
+            box-sizing: border-box; display: block;
+            // border: none; border: solid 1px #CCC;
+            min-width: 0;
+            // background-color: #FFF;
+            legend {
+                margin: 0 0 12px; padding: 0;
+                width: 100%; float: left; display: table;
+                font-size: 21px; font-size: 1.13em; line-height: normal; font-weight: 600; color: #191919;	
+                + * {clear: both;}
+            }
+        }
+        body:not(:-moz-handler-blocked) fieldset {display: table-cell;}
+        
+        /* TOGGLE STYLING */
+        .toggle {
+            margin: 0 0 1.5rem; box-sizing: border-box;
+            font-size: 0;
+            display: flex; flex-flow: row nowrap;
+            justify-content: flex-start; align-items: stretch;
+            input {
+                width: 0;
+                height: 0;
+                position: absolute;
+                left: -9999px;
+            }
+            input + label {
+                margin: 0; padding: .75rem 2rem; box-sizing: border-box;
+                position: relative; display: inline-block;
+                border: solid 1px #b1b1b1; background-color: #FcFcFc;
+                font-size: 1rem; line-height: normal; font-weight: normal; text-align: center;
+                box-shadow: 0 0 0 rgba(255,255,255,0);
+                color: #191919;
+                transition: 	border-color .15s ease-out, 
+                            color .25s ease-out, 
+                            background-color .15s ease-out,
+                            box-shadow .15s ease-out;
+                
+                /* ADD THESE PROPERTIES TO SWITCH FROM AUTO WIDTH TO FULL WIDTH */
+                /*flex: 0 0 50%; display: flex; justify-content: center; align-items: center;*/
+                /* ----- */
+                
+                &:first-of-type {
+                    border-radius: 25px;
+                    margin-right: 18px;
+                }
+                &:last-of-type {
+                    border-radius: 25px;
+                }
+            }
+            // input:hover + label {border-color: navy;}
+            input:checked + label {
+                background-color: #7a0600;
+                color: #FFF;
+                box-shadow: seashell;
+                border-color: #7a0600;
+                z-index: 1;
+                svg path{
+                    fill: #ffffff;
+                }
+            }
+        }
+        
+        /* STYLING FOR THE STATUS HELPER TEXT FOR THE DEMO */
+        .status {
+            margin: 0;
+            font-size: 1rem; font-weight: 400;
+            span {
+                font-weight: 600; color: gold;
+                &:first-of-type {display: inline;}
+                &:last-of-type {display: none;}
+            }
+        }
+        .stageName_form{
+            margin-top: 64px;
+        }
+        .gender_DOB{
+            margin-top: 54px;
+            .DOB{
+                input{
+                    max-width: fit-content;
+                    font-size: 21px;
+                    text-transform: uppercase;
+                    color: #191919;
+                    font-weight: 200;
+                    border: 1px solid #b1b1b1;
+                    border-radius: 4px;
+                }
+            }
+        }
+        .dialect_form{
+            margin-top: 40px;
+        }
+    }
+    .right_section__artist{
+        .middle_form{
+            font-size: 21px;
+            color: #191919;  
+        }
+    }
+    .catchPhrase{
+        margin-top: 24px;
+        h6{
+            font-size: 21px;
+            color: #191919;
+            font-weight: 600;
+        }
+        p{
+            font-size: 18px;
+            color: #191919;
+            font-weight: 300;
+        }
+    }
+    .artistBio{
+        margin-top: 24px;
+        label{
+            font-size: 21px;
+            color: #191919;
+            font-weight: 600;
+        }
+    }
+}
+
+.artist_langGenTags{
+    background-color: #FFF;
+    width: 100%;
+    color: #191919;
+    margin-top: 12px;
+    padding: 16px 0px;
+    border-radius: 8px;
+    label,
+    h6{
+        font-size: 21px;
+        color: #191919;
+        font-weight: 600;
+        margin-top: 24px;
+    }
+    .artistGenre{
+        button{
+            border: 1px solid #7a0600;
+            color: #7a0600;
+            font-size:16px;
+            border-radius: 35px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 12px;
+        }
+        .GenreSubGenre{
+            border: 1px solid #b1b1b1;
+            border-radius: 12px;
+            min-height: 124px;
+            padding: 12px;
+            h6{
+                margin-bottom: 18px;
+            }
+            ul li{
+                margin-right: 15px;
+                font-size: 21px;
+                display: inline-block;
+            }
+            ul li:not(:last-child):after {
+                content: ',' ;
+              }
+        }
+    }
+
+}
+
+.artStry_section{
+    background-color: #ffffff;
+    width: 100%;
+    margin-top: 12px;
+    padding: 16px 0px;
+    border-radius: 8px;
+    min-height: 300px;
+    h6{
+        color: #191919;
+        font-size: 16px;
+        font-size: 1.12em;
+        font-weight: 600;        
+    }
+    .uploadBtn.upStry{
+        border: 1px solid #7a0600;
+        padding: 0px 12px;
+        font-size: 16px;
+        border-radius: 35px;
+        color: #7a0600;
+        height: 36px;
+        margin-top: 12px;
+        cursor: pointer;
+    }
+    // button.saveBtns{
+    //         height: 36px;
+    //         border-radius: 35px;
+    //         border: solid 1px #7a0600;
+    //         background-color: #7a0600;
+    //         color: #fcfcfc;
+    //         font-size: 16px;
+    //         text-transform: uppercase;
+    //         &:hover, &:focus{
+    //             background-color: #7a0600;
+    //         }
+    //     }
+    .uploaded_story{
+        max-width: 17.27vw;
+        .stryThumbnail_wrap{
+            padding-top: 56.25%;
+            border-radius: 12px;
+            border: solid 1px #979797;
+            background-color: #d8d8d8;
+            // max-width: calc(17.27vw);
+            position: relative;
+            height: 0;
+            margin-top: 12px;
+            img{
+                height: 100%;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 100%;
+                border-radius: 12px;
+                -o-object-fit: cover;
+                object-fit: cover;
+            }
+        }
+        .stryDt{
+            margin-top: 8px;
+            .ttlDuration{
+                h6,
+                p{
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #191919;
+                }
+                p{
+                    opacity: 0.7;
+                }
+            }
+        }
+        .artStryCBox{
+            position: absolute; top: 10px; left: 0;
+            label{
+                width: 18px!important;
+                height: 18px!important;
+                margin-right: 8px;
+                &::before{
+                    border-radius: 50%;
+                    width: 100%!important;
+                    height: 100%!important;
+                    margin-right: 0px;
+                }
+                &::after{
+                    box-shadow: none;
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    top: auto;
+                    left: 0px;
+                    right: 0px;
+                    margin: auto;
+                }
+            }
+            .styled-checkbox:hover + label:before{
+                background: none;
+            }
+            // input:checked + label{
+                // background: #e10d37;
+                // width: 100%;
+                // border-radius: 8px;
+                // padding: 5px;
+            // }
+        }
+    }
+}
+
+// artist video modal
+.artist_video_modal{
+    .stryThumbnail_wrap{
+        padding-top: 56.25%;
+        border-radius: 12px;
+        border: solid 1px #979797;
+        background-color: #d8d8d8;
+        position: relative;
+        height: 0;
+        margin-top: 12px;
+        img{
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            border-radius: 12px;
+            -o-object-fit: cover;
+            object-fit: cover;
+        }
+    }
+    .stryDt{
+        margin-top: 8px;
+        .ttlDuration{
+            h6,
+            p{
+                font-size: 16px;
+                font-weight: 600;
+                color: #191919;
+            }
+            p{
+                opacity: 0.7;
+            }
+        }
+    }
+
+    .cCheckbox.artcrd {
+        position: absolute;
+        top: 20px;
+        right: 23px;
+    
+        .styled-checkbox{
+            & + label{
+                font-size: 14px;
+                font-weight: normal;
+            }
+            &:checked + label:after{
+                top: 10.5px;
+                left: 7px;
+            }
+            & + label:before{
+                width: 24px;
+                height: 24px;
+                border-radius:50%;
+                margin-right: 0px;
+            }
+        }
+    }
+}
+
+.img-container {
+    width: 640px;
+    height: 480px;
+    float: left;
+}
+
+.img-preview {
+    width: 200px;
+    height: 200px;
+    float: left;
+    margin-left: 10px;
+}

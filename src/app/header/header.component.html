@@ -1,0 +1,56 @@
+<!-- Header -->
+<header class="cmsHeader">
+    <div class="top__cmsHeader d-flex justify-content-between">
+        <div class="logo">
+            <a href="javascript:void(0);">STAGE CMS</a>
+        </div>
+        <div class="loginInfo__cmsHeader d-flex align-items-center">
+            <div class="cmsUserDt">
+                <p class="mb-0" [innerHtml]="userData.firstName+' '+userData.lastName"></p>
+                <p class="mb-0" *ngIf="userData.lastLogin != ''">Last login: <span [innerHtml]="userData.lastLogin | date:'h:mm a , d MMM, y'"></span>
+                </p>
+            </div>
+            <div class="userImg position-relative dropup">
+                <a href="javascript:void:(0)" class="" role="button" id="logoutLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="ml-3"
+                        style="border: 2px solid #fff;border-radius: 35px;padding: 8px 8px;display: flex;align-items: center;justify-content: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" id="Capa_1" enable-background="new 0 0 515.556 515.556"
+                            height="24px" viewBox="0 0 515.556 515.556" width="24px" class="">
+                            <g>
+                                <path
+                                    d="m348.918 37.751c50.334 50.334 50.334 131.942 0 182.276s-131.942 50.334-182.276 0-50.334-131.942 0-182.276c50.334-50.335 131.942-50.335 182.276 0"
+                                    data-original="#000000" class="active-path" data-old_color="#000000"
+                                    fill="#FFFFFF" />
+                                <path
+                                    d="m455.486 350.669c-117.498-79.391-277.917-79.391-395.415 0-17.433 11.769-27.848 31.656-27.848 53.211v111.676h451.111v-111.676c0-21.555-10.416-41.442-27.848-53.211z"
+                                    data-original="#000000" class="active-path" data-old_color="#000000"
+                                    fill="#FFFFFF" />
+                            </g>
+                        </svg>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-toggle" aria-labelledby="logoutLink" style="transform: translate3d(0px, 50px, 0px);">
+                    <a class="dropdown-item" (click)="logout()">LogOut</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tabNav__cmsHeader">
+        <ul class="nav nav-pills mb-0" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" id="pills-home-tab" data-toggle="pill" role="tab" aria-controls="pills-home"  routerLinkActive="active" routerLink="../dashboard/home">HOME</a>
+            </li>
+            <li class="nav-item" *ngIf="roleId == 3 || roleId == 1">
+                <a class="nav-link" id="pills-contents-tab" data-toggle="pill" role="tab" aria-controls="pills-contents" routerLinkActive="active" routerLink="../dashboard/content">CONTENTS</a>
+            </li>
+            <li class="nav-item" *ngIf="roleId == 2 || roleId == 1">
+                <a class="nav-link" id="pills-review-tab" data-toggle="pill"  role="tab" aria-controls="pills-review" routerLinkActive="active" routerLink="../dashboard/review-publish" >REVIEW & PUBLISH</a>
+            </li>
+            <li class="nav-item" *ngIf="roleId == 4 || roleId == 1">
+                <a class="nav-link" id="pills-videos-tab" data-toggle="pill"  role="tab" aria-controls="pills-videos" routerLinkActive="active" routerLink="../dashboard/videos">VIDEOS</a>
+            </li>
+        </ul>
+        <!-- <button (click)="logout()">Logout</button> -->
+    </div>
+</header>
+<!-- Header -->

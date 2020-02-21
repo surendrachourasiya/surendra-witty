@@ -1,0 +1,136 @@
+<!-- Video Upload Modal -->
+<div class="modal fade uploadModal" id="videoCategory" tabindex="-1" role="dialog" aria-labelledby="videoCategoryTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header pb-0">
+                <!-- <h5 class="modal-title" id="videoCategoryTitle">Video Category</h5> -->
+                <button type="button" class="close pb-0" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="tForm" (ngSubmit)="onSubmit()">
+                    <div formGroupName="uploadData" class="videoCatForm col-lg-6 col-md-6">
+                        <div class="form-group">
+                            <label for="showVideo">Video Category</label>
+                            <select class="form-control text-capitalize" formControlName="type" (change)="changeVideoCategory()">
+                                <option [ngValue]="null">Select video category</option>
+                                <option class="text-capitalize" [ngValue]="category" *ngFor="let category of videoCategories" [innerHtml]="category"></option>
+                            </select>
+                        </div>
+
+                        <div class="showForm" *ngIf="selectedType != null">
+                            <div class="form-group">
+                                <label for="videoName" [innerHtml]="nameFieldText[selectedType]['text']"></label>
+                                <input type="text" formControlName="name" class="form-control" [attr.placeholder]="nameFieldText[selectedType]['placeholder']" (blur)="checkShowNameAvaibility()">
+                            </div>
+    
+                            <div class="form-group" *ngIf="selectedType == 'shows'">
+                                <label for="showSeason">Season</label>
+                                <select class="form-control" formControlName="season">
+                                    <option [ngValue]="null">Select season</option>
+                                    <option [ngValue]="seasonItem.id" *ngFor="let seasonItem of seasonList" [innerHtml]="seasonItem.name"></option>
+                                </select>
+                            </div>
+
+                            <!-- Pheripheral Video button and array -->
+                            <div class="pVideos" *ngIf="selectedType != 'individual'">
+                                <div class="peripheralTop d-flex align-items-center">
+                                    <h5 class="mb-0">Peripheral Videos</h5>
+                                    <!-- <a *ngIf="mediaList.fileList.length > 0">+ Add more</a> -->
+                                </div>
+                                <div class="uploadBtn" *ngIf="mediaList.fileList.length == 0">
+                                    <input type="file" multiple accept="video/mp4" formArrayName='pheripheralVideo' (change)="changeVideo($event, 'mediaList')">
+                                    <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="50px" height="25px" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve"><g><g>
+                                                <g id="attachment">
+                                                    <path d="M140.25,395.25C63.75,395.25,0,331.5,0,255s63.75-140.25,140.25-140.25H408c56.1,0,102,45.9,102,102    c0,56.1-45.9,102-102,102H191.25c-35.7,0-63.75-28.05-63.75-63.75s28.05-63.75,63.75-63.75H382.5v38.25H191.25    c-15.3,0-25.5,10.2-25.5,25.5s10.2,25.5,25.5,25.5H408c35.7,0,63.75-28.05,63.75-63.75S443.7,153,408,153H140.25    c-56.1,0-102,45.9-102,102c0,56.1,45.9,102,102,102H382.5v38.25H140.25z" data-original="#000000" class="active-path" fill="#000000"/>
+                                                </g>
+                                            </g></g> </svg>
+                                    </span>Attach peripheral file                                  
+                                </div>
+
+                                <div class="row mt-2" *ngIf="mediaList.fileList.length > 0">
+                                    <div class="videoCard col-lg-4 col-md-4" *ngFor="let videoItem of this.mediaList.fileList">
+                                        <div class="videoThumbnail rounded-0 mb-1">
+                                            <img src="''" class="img-fluid rounded-0" alt="" />
+                                        </div>
+                                        <div class="title_artistStory">
+                                            <h4 class="m-0" [innerHtml]='videoItem.name'></h4>
+                                            <p class="mb-0">Duration : <span>10:23min</span> | Size : <span [innerHtml]='videoItem.size'></span></p>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
+                                            aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': videoItem.progressPer+'%'}">
+                                              {{videoItem.progressPer}}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /Pheripheral Video button and array -->
+                            
+                            <!-- Episode Video button and array -->
+                            <div class="pVideos"  *ngIf="selectedType == 'shows' || selectedType == 'individual'">
+                                <div class="peripheralTop d-flex align-items-center">
+                                    <h5 class="mb-0">Episode Video</h5>
+                                    <!-- <a *ngIf="episodeList.fileList.length > 0">+ Add more</a> -->
+                                </div>
+                                <div class="uploadBtn" *ngIf="episodeList.fileList.length == 0">
+                                    <input type="file" multiple accept="video/mp4" formArrayName='episodeVideo' (change)="changeVideo($event, 'episodeList')">
+                                    <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="50px" height="25px" viewBox="0 0 510 510" style="enable-background:new 0 0 510 510;" xml:space="preserve"><g><g>
+                                                <g id="attachment">
+                                                    <path d="M140.25,395.25C63.75,395.25,0,331.5,0,255s63.75-140.25,140.25-140.25H408c56.1,0,102,45.9,102,102    c0,56.1-45.9,102-102,102H191.25c-35.7,0-63.75-28.05-63.75-63.75s28.05-63.75,63.75-63.75H382.5v38.25H191.25    c-15.3,0-25.5,10.2-25.5,25.5s10.2,25.5,25.5,25.5H408c35.7,0,63.75-28.05,63.75-63.75S443.7,153,408,153H140.25    c-56.1,0-102,45.9-102,102c0,56.1,45.9,102,102,102H382.5v38.25H140.25z" data-original="#000000" class="active-path" fill="#000000"/>
+                                                </g>
+                                            </g></g> </svg>
+                                    </span>Attach Episode file                                  
+                                </div>
+
+                                <div class="row mt-2" *ngIf="episodeList.fileList.length > 0">
+                                    <div class="videoCard col-lg-4 col-md-4" *ngFor="let videoItem of this.episodeList.fileList">
+                                        <div class="videoThumbnail rounded-0 mb-1">
+                                            <img src="''" class="img-fluid rounded-0" alt="" />
+                                        </div>
+                                        <div class="title_artistStory">
+                                            <h4 class="m-0" [innerHtml]='videoItem.name'></h4>
+                                            <p class="mb-0">Duration : <span>10:23min</span> | Size : <span [innerHtml]='videoItem.size'></span></p>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
+                                            aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': videoItem.progressPer+'%'}">
+                                              {{videoItem.progressPer}}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /Episode Video button and array -->
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                
+                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                <button type="button" class="btn btn_upload" [class.disabled]="!enableSubmitButton" (click)="onSubmit()">
+                    <span><svg xmlns="http://www.w3.org/2000/svg" id="Capa_1"
+                            enable-background="new 0 0 465.882 465.882" height="20px" viewBox="0 0 465.882 465.882"
+                            width="24px">
+                            <g>
+                                <path
+                                    d="m465.882 0-465.882 262.059 148.887 55.143 229.643-215.29-174.674 235.65.142.053-.174-.053v128.321l83.495-97.41 105.77 39.175z"
+                                    data-original="#000000" class="active-path" data-old_color="#000000"
+                                    fill="#FFFFFF" />
+                            </g> 
+                        </svg></span> UPLOAD VIDEOS
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Video Upload Modal -->

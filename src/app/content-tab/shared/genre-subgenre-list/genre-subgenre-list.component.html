@@ -1,0 +1,89 @@
+<!-- genre checked element display list -->
+<div class="genreWrap">
+    <h6>Genre & Sub-genre*</h6>
+    <button *ngIf="allGenreList.checkedCount == 0" class="btn mb-3 roundBlankBtn" type="button" [attr.data-target]="'.open_modal'+seasonIndex" data-backdrop="static" data-keyboard="false" data-toggle="modal" >
+        <span> + </span> &nbsp; ADD GENRE & SUB-GENRE
+    </button>
+    <button *ngIf="allGenreList.checkedCount > 0" class="btn mb-3 roundBlankBtn" type="button" [attr.data-target]="'.open_modal'+seasonIndex" data-backdrop="static" data-keyboard="false" data-toggle="modal" >
+        <span> + </span> &nbsp; EDIT GENRE & SUB-GENRE
+    </button>
+    <div class="row" *ngIf="genreList.length > 0 && allGenreList.checkedCount > 0">
+        <!-- {{selectedData | json}}
+        {{genreList | json}} -->
+        <div class="col-lg-4" style="margin-top: 10px;" *ngFor="let genreItem of genreList">
+            <div class="GenreSubGenre" *ngIf="genreItem.subgenre.length > 0">
+                <h6 [innerHtml]="langType == 'english'?genreItem.name:genreItem.hindiName"></h6>
+                <ul class="list-unstyled">
+                  <ng-container *ngFor="let subGenreItem of genreItem.subgenre; let last = last">
+                      <li *ngIf="subGenreItem.checked==true" [innerHtml]="langType == 'english'?subGenreItem.name : subGenreItem.hinName ">
+                      </li>
+                  </ng-container>
+                </ul>  
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /genre checked element display list -->
+ 
+<!-- Genre Modal-->
+<div class="modal fade genre_modal show" [ngClass]="'open_modal'+seasonIndex" tabindex="-
+1" role="dialog" [attr.aria-labelledby]="'.open_modal'+seasonIndex" aria-hidden="false">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+          <div class="modal-header" style="border-bottom: 1px solid #ccc;">
+              <h5 class="modal-title" id="genre_modal" *ngIf="langType== 'english'">
+                  <div class="modal_search">
+                      <div class="search position-relative">
+                          <input class="form-control rounded-pill" type="text" name="" value=""
+                              placeholder="Search" (ngModelChange)="genreSearch($event)" [(ngModel)]="genreSearchText" />
+                          <span class="position-absolute">
+                              <img src="../../assets/images/ic-search.svg" alt="" />
+                          </span>
+                      </div>
+                  </div>
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body modal_body">
+              <p class="noGenre" [innerHtml]="allGenreList.checkedCount==0 ? 'No genre selected': allGenreList.checkedCount+' genre selected'" ></p>
+              <div class="genreList">
+                  
+                    <!-- <ul class="mb-0 list-unstyled"> -->
+                      <!-- genre.subgenre.length > 0 -->
+                      
+                      <!-- <ul class="mb-0 list-unstyled list_head" *ngFor="let genre of genreList; let gIndex=index">
+                        <h5><span [innerHtml]="genre.name"></span> <span [innerHtml]="'('+genre.subgenre.length+')'"></span></h5>
+                      
+                        <li class="" *ngFor="let subgenre of genre.subgenre; let i=index" style="display: list-item;">
+                            <input class="styled-checkbox" #selectOne type="checkbox" [id]="'subGenre'+subgenre._id" [checked]="subgenre.checked" (change)="checkUncheck(selectOne.checked, gIndex, i)">
+                            <label [for]="'subGenre'+subgenre._id" class="mb-0 align-items-center" [innerHtml]="langType == 'english'?subgenre.name:subgenre.hinName"></label>
+                        </li>
+                      </ul> -->
+                                     
+                  <!-- </ul> -->
+
+                  <ul class="mb-0 list-unstyled">
+                    <li class="" [ngClass]="i == 0 ? 'list_head' : ''"
+                      *ngFor="let subgenre of list; let i=index" style="display: list-item;">
+                        <h5 *ngIf="subgenre.isHeading"><span [innerHtml]="subgenre.name"></span></h5>
+                        <input *ngIf="!subgenre.isHeading" class="styled-checkbox" #selectOne type="checkbox" [id]="'subGenre'+subgenre._id" [checked]="subgenre.checked" (change)="checkUncheck(selectOne.checked, subgenre.parentIndex, subgenre.childIndex, i)">
+                        <label *ngIf="!subgenre.isHeading" [for]="'subGenre'+subgenre._id" class="mb-0 align-items-center" [innerHtml]="langType == 'english'?subgenre.name:subgenre.hinName"></label>
+                    </li>
+                </ul>
+
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button  data-dismiss="modal" aria-label="Close"  class="btn btn-primary" (click)="closeModal()"
+                [disabled]="allGenreList.checkedCount==0" style="border-radius: 35.5px;border: solid 2px #ffffff;background-color: #7a0600;font-family: Muli;
+font-size: 16px; font-weight: 600; font-stretch: normal; font-style: normal; line-height: normal;
+letter-spacing: normal; color: #ffffff;">APPLY</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- /Genre Modal -->

@@ -1,0 +1,730 @@
+<div class="container">
+    <div class="row">
+        <nav aria-label="breadcrumb" class="addArBread">
+            <ol class="breadcrumb pl-0">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href=""
+                        [routerLink]="formType=='Create'? ['../listing/individual'] : ['../../listing/individual']">Individual</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page"> <a [innerHtml]="formType+ ' Individual'"></a>
+                </li>
+            </ol>
+        </nav>
+        <div class="topSection d-flex justify-content-between align-items-center w-100">
+            <div class="addArtistTabs">
+                <ul class="nav nav-pills mb-0" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link" [class.enable]="selectedLang == 'english' || formStatus.english" [class.active]="selectedLang == 'english'"
+                            (click)="changeSelectedLang('english')">English</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" [disabled]="!formStatus.english"
+                            [class.enable]="selectedLang == 'hindi'" [class.active]="selectedLang == 'hindi'"
+                            (click)="changeSelectedLang('hindi')">Hindi</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="control_btns">
+                <ul class="list-unstyled mb-0" *ngIf="currentUrl == 'review-publish'">
+                    <li>
+                        <button type="button" class="btn rounded-pill" [disabled]="saveApiCalling"
+                            (click)="sendToCorrection('draft', 'episode')">Send to Correction</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn rounded-pill"
+                            [routerLink]="formType=='Create'? ['../listing/review'] : ['../../listing/review']"
+                            [queryParams]="{ type: 'individual'}">Close</button>
+                    </li>
+                    <li>
+                        <!-- oldDataArr[selectedLang].status -->
+                        <button type="button" class="btn rounded-pill" [disabled]="saveApiCalling"
+                            (click)="saveApiCall(selectedLang, 'forReview')">Save</button> 
+                    </li>
+                </ul>
+                <ul class="list-unstyled mb-0" *ngIf="currentUrl == 'content'">
+                    <!-- <li>
+                        <button type="button" class="btn rounded-pill">Preview</button>
+                    </li> -->
+                    <li>
+                        <button type="button" class="btn rounded-pill"
+                            [routerLink]="formType=='Create'? ['../listing/individual'] : ['../../listing/individual']">Close</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn rounded-pill" [disabled]="saveApiCalling"
+                            (click)="saveApiCall(selectedLang, 'draft')">Save</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab-conteContent w-100">
+            <!-- English -->
+            <div class="tab-pane fade show active">
+                <p style="color: #fff;" class="d-none">English content</p>
+                <!-- Create Show -->
+                <form [formGroup]="tForm">
+                    <div class="createShowWrap" [formGroup]="tForm.controls[selectedLang]">
+                        <div class="createShow">
+                            <div class="form-group">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label>Individual Name*</label>
+                                    <p class="mb-0">{{tForm.get(selectedLang+'.title').value.length}} /
+                                        <span>50 </span></p>
+                                </div>
+                                <input type="text" class="form-control" maxlength="50" formControlName="title"
+                                    aria-describedby="" (blur)="checkSlugApi()">
+                                <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                            </div>
+                            <div class="form-group desc__create">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label for="metaDesc">Individual Description*</label>
+                                    <p class="mb-0">{{tForm.get(selectedLang+'.description').value.length}} /
+                                        <span>500 </span></p>
+                                </div>
+                                <textarea rows="5" class="form-control" maxlength="500"
+                                    formControlName="description"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sel1">Select Artist*</label>
+                                <ng-container *ngIf="selectedLang == 'english'">
+                                    <tag-input formControlName="artistList" [allowDupes]="false"
+                                        [onlyFromAutocomplete]="true" (onAdd)="addArtistToOther($event)"
+                                        (onRemove)="removeArtistToOther($event)">
+                                        <tag-input-dropdown [showDropdownIfEmpty]="false" [dynamicUpdate]="false"
+                                            [focusFirstElement]="true" [displayBy]="'name'" [identifyBy]="'id'"
+                                            [autocompleteItems]="individualArtistList['english']">
+                                            <ng-template let-item="item" let-index="index">
+                                                {{ item.name }}
+                                            </ng-template>
+                                        </tag-input-dropdown>
+                                    </tag-input>
+                                </ng-container>
+
+                                <ng-container *ngIf="selectedLang == 'hindi'">
+                                    <tag-input formControlName="artistList" [allowDupes]="false"
+                                        [onlyFromAutocomplete]="true" (onRemove)="removeArtistToOther($event)">
+                                        <ng-template let-item="item" let-index="index">
+                                            {{ item.name }}
+                                        </ng-template>
+                                    </tag-input>
+                                </ng-container>
+                            </div>
+
+                            <div class="createShowLabel">
+                                <h6 class="mb-0">Primary Dialect*</h6>
+
+                                <div class="form-group">
+                                    <input type="radio" name="language" value="har" id="har" formControlName="language"
+                                        (change)="copyDataFromOneLangToOther('language')" />
+                                    <label for="har" class="mb-0 text-capitalize">Haryanvi</label>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <input type="radio" name="language" value="hin" id="hin" formControlName="language"
+                                        (change)="copyDataFromOneLangToOther('language')" />
+                                    <label for="hin" class="mb-0 text-capitalize">Hindi</label>
+                                </div>
+                            </div>
+
+                            <!-- Label -->
+                            <div class="createShowLabel">
+                                <h6 class="mb-0">Label*</h6>
+                                <div class="form-group" *ngFor="let item of labels">
+                                    <input type="radio" formControlName="label" [value]="item" [id]="item.english"
+                                        (change)="copyDataFromOneLangToOther('label')" />
+                                    <label [for]="item.english" class="mb-0 text-capitalize"
+                                        [innerHtml]="item[selectedLang]"></label>
+                                </div>
+                            </div>
+                            <!-- /Label -->
+
+                            <!-- Category -->
+                            <div class="createShowCate">
+                                <h6 class="mb-0">Category*</h6>
+                                <ng-container *ngFor="let item of categoryList; let pointIndex=index"
+                                    formArrayName="categoryList">
+                                    <div class="form-group" [formGroupName]="pointIndex">
+                                        <input type="checkbox" [formControlName]="'checked'"
+                                            [id]="'category'+item[selectedLang].id"
+                                            (change)="copyDataFromOneLangToOther('categoryList')" />
+                                        <label [for]="'category'+item[selectedLang].id" class="mb-0 text-capitalize"
+                                            [innerHtml]="item[selectedLang].name"></label>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <!-- /Category -->
+            
+                            <!-- Tags -->
+                            <div class="createShowTags">
+                                <label for="tags" class="">Tags*</label>
+                                <!-- <textarea id="tags" class="form-control" rows="3"></textarea> -->
+                                <div class="force-to-the-bottom">
+                                    <tag-input formControlName="tags" (onBlur)="copyDataFromOneLangToOther('tags')" class="custom__tag__field" modelAsStrings="true"
+                                        placeholder="Enter tags here..." secondaryPlaceholder="Enter tags here...">
+                                    </tag-input>
+                                </div>
+                            </div>
+                            <!-- /Tags -->
+
+                            <!-- Show Genre -->
+                            <app-genre-subgenre-list *ngIf="allGenreList.showGenre==true" [seasonIndex]="0"
+                                [selectedData]="allGenreList.selectedData" [langType]="selectedLang"
+                                (updateGenreList)="allGenreList.formData=$event" [genreList]="allGenreList.allListData">
+                            </app-genre-subgenre-list>
+                            <!-- /Show Genre -->
+                            
+                            <div class="showThumbnail">
+                                <h6>Individual Thumbnails*</h6>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="thumbnail1_1 position-relative"style="border: none;">
+                                            <div class=""
+                                                style="height: 0; padding-top: 100%;display: block;color: #fff; position: relative; z-index: 1; border: 1px solid #b1b1b1; border-bottom: 0;">
+                                                <img *ngIf="!!selectedImages.square.imgURL"
+                                                    [src]="selectedImages.square.imgURL" alt="" class="img-fluid"
+                                                    style="height: 100%;left: 0; position: absolute; top: 0; width: 100%; -o-object-fit: cover; object-fit: cover;" />
+
+                                                <!-- Upload Image -->
+                                                <div *ngIf="!selectedImages.square.imgURL"
+                                                    class="uploadArtImg uploadBtn d-flex flex-column justify-content-between">
+                                                    <input type="file" accept="image/jpeg" formControlName="square"
+                                                        (change)="changeImage($event, 'square')">
+                                                    <span class="mb-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                                            id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
+                                                            style="enable-background:new 0 0 512 512;"
+                                                            xml:space="preserve" width="24px" height="24px">
+                                                            <g>
+                                                                <g>
+                                                                    <g>
+                                                                        <path
+                                                                            d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                                            data-original="#000000" class="active-path"
+                                                                            data-old_color="#000000" fill="#191919" />
+                                                                    </g>
+                                                                </g>
+                                                                <g>
+                                                                    <g>
+                                                                        <polygon
+                                                                            points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                                            data-original="#000000" class="active-path"
+                                                                            data-old_color="#000000" fill="#191919" />
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                    <span>
+                                                        UPLOAD IMAGE
+                                                    </span>
+                                                    <span>1:1</span>
+                                                </div>
+                                                <div class="progress"
+                                                    *ngIf="selectedImages.square.progPer != null && selectedImages.square.status == 'uploading'">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                                        aria-valuemin="0" aria-valuemax="100"
+                                                        [ngStyle]="{'width': selectedImages.square.progPer+'%'}">
+                                                    </div>
+                                                </div>
+                                                <!-- Upload Image -->
+                                            </div>
+                                            
+                                            <div class="imgBackColor" *ngIf="selectedLang == 'hindi'"
+                                                style="width: 100%; min-height: 135px; border-radius: 0px 0px 8px 8px; position: relative; top: -1px; border: 1px solid #b1b1b1; border-top: 0;" [ngStyle]="{'backgroundColor':tForm.get(selectedLang+'.gradient').value}">
+                                            </div>
+                                            <div class="imgBackColor" *ngIf="selectedLang == 'english'"
+                                              style="width: 100%; min-height: 135px; border-radius: 0px 0px 8px 8px; position: relative; top: -1px; border: 1px solid #b1b1b1; border-top: 0;"
+                                              [ngStyle]="{'backgroundColor':tForm.get(selectedLang+'.gradient').value}">
+                                            </div>
+                                        </div>
+                                        <span *ngIf="selectedImages.square.status == 'failed'"
+                                            style="position: absolute; margin-top: 14px; color: red;">Error in image
+                                            upload.</span>
+                                        <span></span>
+                                        <div class="color__createShow" *ngIf="!!selectedImages.square.imgURL">
+                                            <!-- <div class="row"> -->
+                                                <div class="colorBox">
+                                                    <div class="cstColor d-flex">
+                                                        <div class="colorPicker btn">
+                                                            <input type="color" formControlName="gradient" name="gradient.value"
+                                                                id="gradient" value="#ddd" />
+                                                            <label class="mb-0" for="gradient">CUSTOM COLOR</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div class="uploadBtn changeImg position-absolute">
+                                            <input type="file" accept="image/jpeg" formControlName="square"
+                                                (change)="changeImage($event, 'square')"> 
+                                                <span [innerHtml]="!!selectedImages.square.imgURL? 'CHANGE': 'UPLOAD'"></span>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="thumbnail16_9">
+                                            <div class=""
+                                                style="height: 0; padding-top: 56.25%;display: block;color: #fff; position: relative; z-index: 1;">
+                                                <img *ngIf="!!selectedImages.horizontal_large.imgURL"
+                                                    [src]="selectedImages.horizontal_large.imgURL" alt=""
+                                                    class="img-fluid"
+                                                    style="height: 100%;left: 0; position: absolute; top: 0; width: 100%; -o-object-fit: cover; object-fit: cover;" />
+
+                                                <!-- Upload Image -->
+                                                <div *ngIf="!selectedImages.horizontal_large.imgURL"
+                                                    class="uploadArtImg uploadBtn d-flex flex-column justify-content-between">
+                                                    <input type="file" accept="image/jpeg"
+                                                        formControlName="horizontal_large"
+                                                        (change)="changeImage($event, 'horizontal_large')">
+                                                    <span class="mb-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                                            id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
+                                                            style="enable-background:new 0 0 512 512;"
+                                                            xml:space="preserve" width="24px" height="24px">
+                                                            <g>
+                                                                <g>
+                                                                    <g>
+                                                                        <path
+                                                                            d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                                            data-original="#000000" class="active-path"
+                                                                            data-old_color="#000000" fill="#191919" />
+                                                                    </g>
+                                                                </g>
+                                                                <g>
+                                                                    <g>
+                                                                        <polygon
+                                                                            points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                                            data-original="#000000" class="active-path"
+                                                                            data-old_color="#000000" fill="#191919" />
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                    <span>
+                                                        UPLOAD IMAGE
+                                                    </span>
+                                                    <span>16:9</span>
+                                                </div>
+                                                <div class="progress"
+                                                    *ngIf="selectedImages.horizontal_large.progPer != null && selectedImages.horizontal_large.status == 'uploading'">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                                        aria-valuemin="0" aria-valuemax="100"
+                                                        [ngStyle]="{'width': selectedImages.horizontal_large.progPer+'%'}">
+                                                    </div>
+                                                </div>
+                                                <!-- Upload Image -->
+                                            </div>
+                                        </div>
+                                        <span *ngIf="selectedImages.horizontal_large.status == 'failed'"
+                                            style="position: absolute; margin-top: 14px; color: red;">Error in image
+                                            upload.</span>
+                                        <div class="uploadBtn changeImg ">
+                                            <input type="file" accept="image/jpeg" formControlName="horizontal_large"
+                                                (change)="changeImage($event, 'horizontal_large')"> 
+                                                <span [innerHtml]="!!selectedImages.horizontal_large.imgURL? 'CHANGE': 'UPLOAD'"></span>
+                                        </div>
+                                        <div class="thumbnail16_9 mt-5">
+                                            <div class=""
+                                                style="height: 0; padding-top: 56.25%;display: block;color: #fff; position: relative; z-index: 1;">
+                                                <img *ngIf="!!selectedImages.horizontal_small.imgURL"
+                                                    [src]="selectedImages.horizontal_small.imgURL" alt=""
+                                                    class="img-fluid"
+                                                    style="height: 100%;left: 0; position: absolute; top: 0; width: 100%; -o-object-fit: cover; object-fit: cover;" />
+
+                                                <!-- Upload Image -->
+                                                <div *ngIf="!selectedImages.horizontal_small.imgURL"
+                                                    class="uploadArtImg uploadBtn d-flex flex-column justify-content-between">
+                                                    <input type="file" accept="image/jpeg"
+                                                        formControlName="horizontal_small"
+                                                        (change)="changeImage($event, 'horizontal_small')">
+                                                    <span class="mb-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                                            id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
+                                                            style="enable-background:new 0 0 512 512;"
+                                                            xml:space="preserve" width="24px" height="24px">
+                                                            <g>
+                                                                <g>
+                                                                    <g>
+                                                                        <path
+                                                                            d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                                            data-original="#000000" class="active-path"
+                                                                            data-old_color="#000000" fill="#191919" />
+                                                                    </g>
+                                                                </g>
+                                                                <g>
+                                                                    <g>
+                                                                        <polygon
+                                                                            points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                                            data-original="#000000" class="active-path"
+                                                                            data-old_color="#000000" fill="#191919" />
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                    <span>
+                                                        UPLOAD IMAGE
+                                                    </span>
+                                                    <span>3:2</span>
+                                                </div>
+                                                <div class="progress"
+                                                    *ngIf="selectedImages.horizontal_small.progPer != null && selectedImages.horizontal_small.status == 'uploading'">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                                        aria-valuemin="0" aria-valuemax="100"
+                                                        [ngStyle]="{'width': selectedImages.horizontal_small.progPer+'%'}">
+                                                    </div>
+                                                </div>
+                                                <!-- Upload Image -->
+                                            </div>
+                                        </div>
+                                        <span *ngIf="selectedImages.horizontal_small.status == 'failed'"
+                                            style="position: absolute; margin-top: 14px; color: red;">Error in image
+                                            upload.</span>
+                                        <div class="uploadBtn changeImg position-absolute">
+                                            <input type="file" accept="image/jpeg" formControlName="horizontal_small"
+                                                (change)="changeImage($event, 'horizontal_small')">
+                                                <span [innerHtml]="!!selectedImages.horizontal_small.imgURL? 'CHANGE': 'UPLOAD'"></span> </div>
+                                    </div>
+                                    <div class="col-lg-4 pl-0">
+                                        <div class="thumbnail4_5">
+                                            <div class=""
+                                                style="height: 0; padding-top: 125%;display: block;color: #fff; position: relative; z-index: 1;">
+                                                <img *ngIf="!!selectedImages.vertical.imgURL"
+                                                    [src]="selectedImages.vertical.imgURL" alt="" class="img-fluid"
+                                                    style="height: 100%;left: 0; position: absolute; top: 0; width: 100%; -o-object-fit: cover; object-fit: cover;" />
+
+                                                <!-- Upload Image -->
+                                                <div *ngIf="!selectedImages.vertical.imgURL"
+                                                    class="uploadArtImg uploadBtn d-flex flex-column justify-content-between">
+                                                    <input type="file" accept="image/jpeg" formControlName="vertical"
+                                                        (change)="changeImage($event, 'vertical')">
+                                                    <span class="mb-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                                            id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
+                                                            style="enable-background:new 0 0 512 512;"
+                                                            xml:space="preserve" width="24px" height="24px">
+                                                            <g>
+                                                                <g>
+                                                                    <g>
+                                                                        <path
+                                                                            d="M472,312.642v139c0,11.028-8.972,20-20,20H60c-11.028,0-20-8.972-20-20v-139H0v139c0,33.084,26.916,60,60,60h392    c33.084,0,60-26.916,60-60v-139H472z"
+                                                                            data-original="#000000" class="active-path"
+                                                                            data-old_color="#000000" fill="#191919" />
+                                                                    </g>
+                                                                </g>
+                                                                <g>
+                                                                    <g>
+                                                                        <polygon
+                                                                            points="256,0.358 131.716,124.642 160,152.926 236,76.926 236,388.642 276,388.642 276,76.926 352,152.926     380.284,124.642   "
+                                                                            data-original="#000000" class="active-path"
+                                                                            data-old_color="#000000" fill="#191919" />
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                    <span>
+                                                        UPLOAD IMAGE
+                                                    </span>
+                                                    <span>9:16</span>
+                                                </div>
+                                                <div class="progress"
+                                                    *ngIf="selectedImages.vertical.progPer != null && selectedImages.vertical.status == 'uploading'">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                                        aria-valuemin="0" aria-valuemax="100"
+                                                        [ngStyle]="{'width': selectedImages.vertical.progPer+'%'}">
+                                                    </div>
+                                                </div>
+                                                <!-- Upload Image -->
+                                            </div>
+                                        </div>
+                                        <span *ngIf="selectedImages.vertical.status == 'failed'"
+                                            style="position: absolute; margin-top: 14px; color: red;">Error in image
+                                            upload.</span>
+                                        <div class="uploadBtn changeImg position-absolute">
+                                            <input type="file" accept="image/jpeg" formControlName="vertical"
+                                                (change)="changeImage($event, 'vertical')"> 
+                                                <span [innerHtml]="!!selectedImages.vertical.imgURL? 'CHANGE': 'UPLOAD'"></span> </div>
+                                    </div>
+                                </div>
+
+                                <!-- Color Selection -->
+                                <div class="wrapSelColor d-flex mt-5"
+                                    *ngIf="imageGradientColorEng.length > 0 && selectedLang == 'english'">
+                                    <div class="SelColor" *ngFor="let color of imageGradientColorEng">
+                                        <label class="colRadio" (click)="setImageColor(color);"
+                                            [ngStyle]="{'backgroundColor':color}">
+                                            <input type="radio" name="radio"
+                                                [checked]="color == tForm.get('english.gradient').value"
+                                                class="radioButton">
+                                            <span class="checkmark"> {{color}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="wrapSelColor d-flex mt-5"
+                                    *ngIf="imageGradientColorHin.length > 0 && selectedLang == 'hindi'">
+                                    <div class="SelColor" *ngFor="let color of imageGradientColorHin">
+                                        <label class="colRadio" (click)="setImageColor(color);"
+                                            [ngStyle]="{'backgroundColor':color}">
+                                            <input type="radio" name="radio1"
+                                                [checked]="color == tForm.get('hindi.gradient').value"
+                                                class="radioButton">
+                                            <span class="checkmark">{{color}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- Color Selection /. -->
+                            </div>
+
+                            <!-- <div class="color__createShow" *ngIf="!!selectedImages.square.imgURL">
+                                <h6></h6>
+                                <div class="row">
+                                    <div class="colorBox col-lg-4">
+                                        <label for="color">Color</label>
+                                        <div class="form-control" style="width: 100%; min-height: 100px;"
+                                            [ngStyle]="{'backgroundColor':tForm.get(selectedLang+'.gradient').value}">
+                                        </div>
+                                        <div class="cstColor d-flex">
+                                            <div class="colorPicker btn">
+                                                <input type="color" formControlName="gradient" name="gradient.value"
+                                                    id="gradient" value="#ddd" />
+                                                <label class="mb-0" for="gradient">CHANGE</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="videos__createShow">
+                                <h6> Videos*</h6>
+                                <div class="trailerMore">
+                                    <div class="ttl d-flex justify-content-between align-items-center">
+                                        <!-- <button class="btn" type="button" *ngIf="!selecteVideoElement['sourceLink']"
+                                        data-toggle="modal" data-target=".artist_video_modal"> -->
+                                        <button type="button" class="openPopUp roundedBtn rounded-pill"
+                                            *ngIf="!selecteVideoElement['sourceLink']" data-toggle="modal"
+                                            data-target=".artist_video_modal">+ ADD INDIVIDUAL
+                                            VIDEO</button>
+                                    </div>
+                                    <button class="btn roundBlankBtn d-none" type="button" data-toggle="modal"
+                                        data-target=".genre_modal">
+                                        <span> + </span> &nbsp; ADD VIDEO
+                                    </button>
+                                    <div class="row">
+                                        <div class="uploaded_story col-lg-4"
+                                            *ngIf="!!selecteVideoElement['sourceLink']">
+                                            <div class="stryThumbnail_wrap">
+                                                <div class="stryThumbnail">
+                                                    <img [attr.src]="!!selectedImages.square.imgURL ? selectedImages.square.imgURL : s3UrlIndividual['basePath']+s3UrlIndividual['episodeImagePath']+'/horizontal/'+selecteVideoElement['thumbnail']"
+                                                        alt="" class="img-fluid" />
+                                                    <!-- <img
+                                          [attr.src]="s3UrlIndividual['basePath']+s3UrlIndividual['episodeImagePath']+'/horizontal/'+selecteVideoElement['thumbnail']"
+                                          alt="" class="img-fluid" /> -->
+                                                </div>
+                                            </div>
+                                            <div class="stryDt d-flex justify-content-between align-items-center">
+                                                <div class="ttlDuration">
+                                                    <h6 class="mb-0" [innerHtml]="selecteVideoElement['sourceLink']">
+                                                    </h6>
+                                                    <p class="mb-0">Duration : <span [innerHtml]="selecteVideoElement['duration'] | timeFormatter"></span> min</p>
+                                                </div>
+                                                <div class="ellIc">
+                                                    <svg id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true" xmlns="http://www.w3.org/2000/svg"
+                                                        aria-expanded="false" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                        version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 384 384"
+                                                        style="enable-background:new 0 0 384 384;" xml:space="preserve"
+                                                        width="24px" height="24px">
+                                                        <g>
+                                                            <g>
+                                                                <g>
+                                                                    <circle cx="192" cy="42.667" r="42.667"
+                                                                        data-original="#000000" class="active-path"
+                                                                        fill="#000000" />
+                                                                </g>
+                                                            </g>
+                                                            <g>
+                                                                <g>
+                                                                    <circle cx="192" cy="192" r="42.667"
+                                                                        data-original="#000000" class="active-path"
+                                                                        fill="#000000" />
+                                                                </g>
+                                                            </g>
+                                                            <g>
+                                                                <g>
+                                                                    <circle cx="192" cy="341.333" r="42.667"
+                                                                        data-original="#000000" class="active-path"
+                                                                        fill="#000000" />
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item"
+                                                            (click)="bindUnbindArtistStory(false)">Remove
+                                                        </a>
+                                                        <!-- <a class="dropdown-item" href="#">Two</a>
+                                                        <a class="dropdown-item" href="#">Three</a> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Meta -->
+                        <div class="meta_Wrapper">
+                            <div class="metaTitle">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label for="metatitle">Meta Title</label>
+                                    <p class="mb-0">Remanining Characters :
+                                        <span>{{50 - tForm.get(selectedLang+'.metaTitle').value.length}} </span></p>
+                                </div>
+                                <input type="text" maxlength="50" formControlName="metaTitle" class="form-control" id="metatitle" />
+                            </div>
+                            <div class="metaTags">
+                                <label for="metaTags">Meta Tags</label>
+                                <div class="force-to-the-bottom">
+                                    <tag-input formControlName="metaKeyword" class="custom__tag__field"
+                                        modelAsStrings="true" placeholder="Enter tags here..."
+                                        secondaryPlaceholder="Enter tags here...">
+                                    </tag-input>
+                                </div>
+                            </div>
+                            <div class="metaDesc">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label for="metaDesc">Meta Description</label>
+                                    <p class="mb-0">Remanining Characters :
+                                        <span>{{500 - tForm.get(selectedLang+'.metaDescription').value.length}} </span></p>
+                                </div>
+                                <textarea rows="3" maxlength="500" formControlName="metaDescription"
+                                    class="form-control" id="metaDesc"></textarea>
+                            </div>
+                        </div>
+                        <!-- Meta ./ -->
+
+                        <!-- saveBtn -->
+                        <div class="saveBtnsWrap">
+                            <div class="saveBtns d-flex justify-content-end align-items-center"
+                                *ngIf="currentUrl == 'content'">
+                                <button type="submit" *ngIf="selectedLang == 'english'"
+                                    class="btn rounded-pill btn-danger"
+                                    (click)="saveApiCall(selectedLang, 'completed')" [disabled]="saveApiCalling">SAVE & NEXT</button>
+                                <button type="submit" *ngIf="selectedLang == 'hindi'" class="btn rounded-pill btn-dange"
+                                    (click)="saveApiCall(selectedLang, 'completed')" [disabled]="saveApiCalling">SUBMIT</button>
+                            </div>
+                            <div class="saveBtns d-flex justify-content-end align-items-center"
+                                *ngIf="currentUrl == 'review-publish'">
+                                <button type="submit" *ngIf="selectedLang == 'english'"
+                                    class="btn rounded-pill btn-danger"
+                                    (click)="sendToCorrection('reviewed', 'episode')" [disabled]="saveApiCalling">MARKED AS REVIEW</button>
+                                <button type="submit" *ngIf="selectedLang == 'english'"
+                                    class="btn rounded-pill btn-danger"
+                                    (click)="saveApiCall(selectedLang, 'publish')"  [disabled]="saveApiCalling">REVIEW ADD TO PUBLISH</button>
+                                <!-- <button type="submit" *ngIf="selectedLang == 'hindi'" class="btn rounded-pill btn-dange"
+                                    (click)="saveApiCall(selectedLang, 'publish')">SUBMIT</button> -->
+                            </div>
+                        </div>
+                        <!-- saveBtn -->
+                    </div>
+                </form>
+                <!-- Create Show ./-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Video list Modal-->
+<div class="modal fade video_modal collection_video_modal" tabindex="-1" role="dialog"
+    aria-labelledby="collection_video_modal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 1px solid #ccc;">
+                <h5 class="modal-title">
+                    Select Collection Video
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-xs-6" *ngFor="let item of videoList.all.collectionVideo">
+                        <div class="uploaded_story">
+                            <div class="stryThumbnail_wrap">
+                                <div class="stryThumbnail" (click)="bindUnbindArtistStory(item)">
+                                    <img src="../../assets/images/2.jpeg" alt="" class="img-fluid" />
+                                </div>
+                            </div>
+                            <div class="stryDt d-flex justify-content-between align-items-center">
+                                <div class="ttlDuration">
+                                    <h6 class="mb-0" [innerHtml]="item.sourceLink"></h6>
+                                    <p class="mb-0">Duration : <span [innerHtml]="item.duration+ 'min'"></span></p>
+                                </div>
+                            </div>
+                            <div class="cCheckbox artcrd">
+                                <!-- [checked]="item._id == selecteVideoElement['_id']" -->
+                                <input class="styled-checkbox" [id]="'artcrd'+item._id" type="checkbox"
+                                    (click)="$event.preventDefault()">
+                                <label [for]="'artcrd'+item._id" class="ml-2 mb-0 d-flex align-items-center"></label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Video list Modal-->
+<div class="modal fade artist_video_modal" tabindex="-1" role="dialog" aria-labelledby="artist_video_modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 1px solid #ccc;">
+                <h5 class="modal-title">
+                    Select Artist Video
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-xs-6" *ngFor="let item of individualVideoList">
+                        <div class="uploaded_story">
+                            <div class="stryThumbnail_wrap">
+                                <!-- <div class="stryThumbnail" (click)="bindUnbindArtistStory(item)"> -->
+                                <div class="stryThumbnail" (click)="bindUnbindArtistStory(item)">
+                                    <img [attr.src]="s3UrlIndividual['basePath']+s3UrlIndividual['episodeImagePath']+'/horizontal/'+item['thumbnail']"
+                                        alt="" class="img-fluid" />
+                                </div>
+                            </div>
+                            <div class="stryDt d-flex justify-content-between align-items-center">
+                                <div class="ttlDuration">
+                                    <h6 class="mb-0 text-black" [innerHtml]="item.sourceLink"></h6>
+                                    <p class="mb-0 text-black-50">Duration : <span
+                                            [innerHtml]="item.duration | timeFormatter"></span></p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,169 @@
+// upload Video Modal css
+.uploadBtn {
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #ffffff;
+    height: 72px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: fit-content;
+    padding: 0px 16px;
+    font-size: 21px;
+    padding: 0px 40px;
+    color: #e0e0e0;
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;   
+        cursor: inherit;
+        display: block;
+    }
+}
+
+.videoCard{
+    .videoThumbnail{
+        padding-top: 66.67%;
+        border-radius: 12px;
+        z-index: 2;
+        position: relative;
+        width: 100%;
+        height: 0;
+        display: block;
+        color: #fff;
+        img{
+            height: 100%;
+            left: 0px;
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            border-radius: 12px;
+            -o-object-fit: cover;
+            object-fit: cover;
+        }
+    }
+    .title_artistStory{
+        h4{
+            font-size: 21px;
+            font-weight: 600;
+            margin-top: 12px;
+            letter-spacing: normal;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            min-height: 50px;
+            overflow: hidden;
+        }
+        p{
+            font-size: 16px;
+            opacity: 0.7;
+        }
+    }   
+}
+
+.uploadModal{
+    .modal-lg{
+        max-width: 1050px;
+        .modal-content{
+            min-width: 1050px;
+            min-height: 600px;
+            border-radius: 20px;
+                .modal-header{
+                    border-bottom: none;
+                }
+                .modal-footer{
+                    background-color: #ebeaea;
+                    border-radius: 0px 0px 20px 20px;
+                }
+                .videoCatForm{
+                    label{
+                        font-size: 24px;
+                        color: #3f3f3f;
+                        font-weight: 600;
+                        line-height: normal;
+                    }
+                    .showForm{
+                        .form-group{
+                            margin-top: 28px;
+                        }
+                        .pVideos,
+                        .epiVideos{
+                            margin-top: 28px;
+                            h5{
+                                font-size: 24px;
+                                color: #3f3f3f;
+                                font-weight: 600;
+                                margin-bottom: 12px;
+                            }
+                            .peripheralTop{
+                                margin-bottom: 24px;
+                                h5{
+                                    margin-right: 20px;
+                                }
+                                a{
+                                    font-size: 18px;
+                                    color: #7a0600;
+                                    font-weight: 600;
+                                    line-height: normal;
+                                }
+                            }
+                            .uploadBtn{
+                                font-size: 24px;
+                                color: #3f3f3f;
+                                font-weight: 600;
+                                line-height: normal;
+                                border: 1px solid #979797;
+                                background-color: #fafafa;
+                                border-radius: 8px;
+                                padding: 0px 20px;
+                                height: 55px;
+                                min-width: 346px;
+                                justify-content: flex-start;
+                                margin-top: 12px;
+                            }
+                            .videoCard{
+                                .videoThumbnail{
+                                    padding-top: 56.25%;
+                                    background-color: #d8d8d8;
+                                    border: 1px solid #979797;
+                                }
+                                .title_artistStory{
+                                    color: #3f3f3f;
+                                    h4{
+                                        font-size: 14px;
+                                        min-height: 16px;
+                                    }
+                                    p{
+                                        font-size: 12px;
+                                        opacity: 0.7;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .btn_upload{
+                    background-color: #7a0600;
+                    // border: solid 2px #ffffff;
+                    color: #fff;
+                    font-size: 18px;
+                    border-radius: 35px;
+                    padding: 10px 24px;
+                    &.disabled{
+                        opacity: 0.7;
+                        cursor: not-allowed;
+                    }
+                    span{
+                        margin-right: 10px;
+                    }
+                }
+        }
+    }
+}

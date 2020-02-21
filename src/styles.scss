@@ -1,0 +1,284 @@
+
+/* You can add global styles to this file, and also import other style files */
+a{
+    text-decoration: none;
+}
+
+*{
+    outline: 0;
+}
+html{
+    font-size:1vw;
+}
+
+body{
+    font-family: 'Muli', sans-serif;
+    background-color: #191919;
+    color:#e0e0e0;
+}
+
+.txt_color_{
+    &primary{
+        color: #7a0600;
+    }
+    &grey{
+        color: #191919;
+    }
+    &info_1{
+        color: #0d9dc9;
+    }
+    &info_2{
+        color: #e10d37;
+    }
+}
+
+.form-control.ng-touched.ng-invalid {
+    border:2px solid #7a0600 !important;
+}
+  
+
+.custom__tag__field{
+
+    .tag-wrapper delete-icon{
+        width: 15px;
+        height: auto;
+        margin-left: 12px;
+        svg{
+            height: auto!important;
+            path {
+                fill: #921414;
+            }
+        } 
+
+    } 
+    .ng2-tags-container tag{
+        line-height: normal;
+        background: #ffffff;
+        border: 1px solid #aaa;
+        justify-content: center;
+        align-items: center;
+        padding: 0px 12px;
+    }
+    .ng2-tag-input{
+        background: #fcfcfc;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .ng2-tags-container {
+        min-height: 106px;
+        padding:0 8px;
+    }
+    .ng2-tag-input.ng2-tag-input--focused{
+        border-bottom: 2px solid #ddd;
+    }
+    .ng2-tag-input__text-input{
+        background-color: transparent;
+    }
+
+    &.ng-invalid.ng-touched{
+        .ng2-tag-input{
+            border:2px solid #7a0600 !important;
+        }
+    }
+}
+
+@media (min-width:1301px) and (max-width: 1400px){
+    .container {
+        max-width: 1300px;
+    }
+    .top__cmsHeader{
+        max-width: 1300px;
+        margin: 0 auto;
+    }
+    .tabNav__cmsHeader{
+        max-width: 1300px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 1401px) and (max-width:1480px){
+    .container {
+        max-width: 1400px;
+    }
+    .top__cmsHeader{
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .tabNav__cmsHeader{
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 1481px){
+    .container {
+        max-width: 1440px;
+    }
+    .top__cmsHeader{
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+    .tabNav__cmsHeader{
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+}
+// @media (min-width:1300px){
+//     .container {
+//         max-width: 1170px;
+//     }
+//     .top__cmsHeader{
+//         max-width: 1170px;
+//         margin: 0 auto;
+//     }
+//     .tabNav__cmsHeader{
+//         max-width: 1170px;
+//         margin: 0 auto;
+//     } 
+// }
+
+.dDown{
+    .arrow_box {
+        position: relative;
+        background: #ffffff;
+        border: 1px solid #cccccc;
+        top: 15px!important;
+        left: -15px!important;
+        a{
+                    color: #000;
+                    &:focus{
+                        background: none;
+                    }
+                }
+    }
+    .arrow_box:after, .arrow_box:before {
+        bottom: 100%;
+        left: 25px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    
+    .arrow_box:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-bottom-color: #ffffff;
+        border-width: 10px;
+        margin-left: -10px;
+    }
+    .arrow_box:before {
+        border-color: rgba(204, 204, 204, 0);
+        border-bottom-color: #cccccc;
+        border-width: 11px;
+        margin-left: -11px;
+    }
+}
+
+.styled-checkbox {
+    position: absolute; 
+    opacity: 0; 
+  
+    & + label {
+      position: relative;
+      cursor: pointer;
+      padding: 0;
+      color: #191919;
+      opacity: 0.7;
+      font-weight: 600;
+    }
+  
+    // Box.
+    & + label:before {
+      content: '';
+      margin-right: 6px;
+      display: inline-block;
+      vertical-align: text-top;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border: 1px solid #191919;
+    }
+  
+    // Box hover
+    &:hover + label:before {
+      background: #191919;
+    }
+    
+    // Box focus
+    // &:focus + label:before {
+    //   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+    // }
+  
+    // Box checked
+    &:checked + label:before {
+      background: #7a0600;
+      border: 1px solid #7a0600;
+    }
+    &:checked + label{
+        color: #7a0600;
+        opacity: 1;
+    }
+    
+    // Disabled state label.
+    &:disabled + label {
+      color: #b8b8b8;
+      cursor: auto;
+    }
+  
+    // Disabled box.
+    &:disabled + label:before {
+      box-shadow: none;
+      background: #ddd;
+    }
+  
+    // Checkmark. Could be replaced with an image
+    &:checked + label:after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 11px;
+      background: white;
+      width: 2px;
+      height: 2px;
+      box-shadow: 
+        2px 0 0 white,
+        4px 0 0 white,
+        4px -2px 0 white,
+        4px -4px 0 white,
+        4px -6px 0 white,
+        4px -8px 0 white;
+      transform: rotate(45deg);
+    }
+  }
+
+  
+svg.transRotate{
+    transform: rotate(90deg);
+    transition: 0.5s;
+}
+
+.saveBtnsWrap{
+    background-color: #ebeaea;
+    border-radius: 0px 0px 8px 8px;
+    padding: 14px 20px;
+    margin-top: 12px;
+    // border-radius: 8px;
+    width: 100%;
+    button{
+        background-color:#7a0600;
+        color: #FCFCFC;
+        border: 1px solid #f1f1f1;
+        border-radius: 35px;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 8px 16px;
+        text-transform: uppercase;
+        &:hover,
+        &:focus{
+            background-color: #7a0600;
+            color: #FCFCFC;
+        }
+    }
+}

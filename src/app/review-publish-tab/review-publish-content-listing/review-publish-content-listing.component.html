@@ -1,0 +1,560 @@
+<div class="container p-0">
+    <div class="row contents">
+        <!-- left panel -->
+        <div class="col-lg-2">
+            <div class="Tabs__contents">
+                <ul class="list-unstyled">
+                    <li><a class="rounded-pill" (click)='resetSearch()' routerLinkActive="active"
+                            [routerLink]="['../review']">
+                            <span></span> To be Reviewed
+                        </a></li>
+                    <li><a class="rounded-pill" (click)='resetSearch()' routerLinkActive="active"
+                            [routerLink]="['../publish']">
+                            <span></span> To be Published
+                        </a></li>
+                    <li><a class="rounded-pill" (click)='resetSearch()' routerLinkActive="active"
+                            [routerLink]="['../active']">
+                            <span></span> Live On Stage
+                        </a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /left panel -->
+
+        <!-- Right Panel -->
+        <div class="col-lg-10 wrapPanel__contents" *ngIf="typeSelected != 'publish'">
+            <div class="panel__contents">
+                <!-- Inner tab panel -->
+                <div class="tabs">
+                    <ul class="nav nav-pills mb-3">
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="isActiveSubTab('artist')"
+                                (click)="changeActiveSubTab('artist')">ARTIST (<span
+                                    [innerHtml]="tabCountObj['artist']"></span>)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="isActiveSubTab('show')"
+                                (click)="changeActiveSubTab('show')">SHOW (<span
+                                    [innerHtml]="tabCountObj['show']"></span>)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="isActiveSubTab('collection')"
+                                (click)="changeActiveSubTab('collection')">COLLECTION (<span
+                                    [innerHtml]="tabCountObj['collection']"></span>)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="isActiveSubTab('individual')"
+                                (click)="changeActiveSubTab('individual')">INDIVIDUAL (<span
+                                    [innerHtml]="tabCountObj['individual']"></span>)</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /Inner tab panel -->
+                <!-- Top bar actions -->
+                <div class="topPanel__contents d-flex align-items-center justify-content-between">
+                    <div class="leftAction d-flex align-items-center">
+                        <div class="addArtist" *ngIf="tabSelected=='all' || tabSelected=='draft'">
+                            <div class="reviewSend">
+                                <button *ngIf="typeSelected == 'artist'" type="button"
+                                    class="btn rounded-pill sendReview" [routerLink]="['../../update-artist']">ADD
+                                    ARTIST</button>
+                                <button *ngIf="typeSelected == 'collection'" type="button"
+                                    class="btn rounded-pill sendReview" [routerLink]="['../../update-collection']">ADD
+                                    COLLECTION</button>
+                                <button *ngIf="typeSelected == 'show'" type="button" class="btn rounded-pill sendReview"
+                                    [routerLink]="['../../update-show']">ADD SHOW</button>
+                                <button *ngIf="typeSelected == 'individual'" type="button"
+                                    class="btn rounded-pill sendReview" [routerLink]="['../../update-individual']">ADD
+                                    INDIVIDUAL</button>
+                            </div>
+                        </div>
+                        <!-- send to review action for completed tab -->
+                        <div class="cCheckbox" *ngIf="typeSelected == 'review'">
+                            <input class="styled-checkbox" #selectAllField id="styled-checkbox-4" type="checkbox"
+                                value="true" [checked]="sentToReviewLength==listing.data.length && listing.data.length!=0"
+                                (change)="selectAllEvent(selectAllField.checked)">
+                            <label for="styled-checkbox-4" class="mb-0 d-flex align-items-center">SELECT ALL</label>
+                        </div>
+                        <div class="reviewSend" *ngIf="typeSelected == 'review'">
+                            <button type="button" class="btn rounded-pill sendReview" [disabled]="sentToReviewLength == 0 || saveApiCalling" (click)="apiMoveToPublish()">
+                                <span *ngIf="saveApiCalling" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                <span>MOVE TO PUBLISH</span>
+                            </button>
+                        </div>
+                        <!-- /send to review action for completed tab -->
+                    </div>
+                    <div class="right__topPanel">
+                        <div class="search position-relative">
+                            <input class="form-control rounded-pill" type="text" (ngModelChange)="onSearch($event)"
+                                [(ngModel)]="searchText" name="" value="" [placeholder]="'Search '+typeSelected" />
+                            <span class="position-absolute">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="18" height="18" viewBox="0 0 18 18">
+                                    <defs>
+                                        <path id="a"
+                                            d="M9.625 8.5h-.592l-.21-.203A4.853 4.853 0 0 0 10 5.125 4.875 4.875 0 1 0 5.125 10a4.853 4.853 0 0 0 3.172-1.178l.203.21v.593l3.75 3.742 1.117-1.117L9.625 8.5zm-4.5 0A3.37 3.37 0 0 1 1.75 5.125 3.37 3.37 0 0 1 5.125 1.75 3.37 3.37 0 0 1 8.5 5.125 3.37 3.37 0 0 1 5.125 8.5z" />
+                                        <path id="c" d="M0 0h37.5v37.5H0z" />
+                                    </defs>
+                                    <g fill="none" fill-rule="evenodd" opacity=".704" transform="translate(2 2)">
+                                        <mask id="b" fill="#fff">
+                                            <use xlink:href="#a" />
+                                        </mask>
+                                        <g mask="url(#b)">
+                                            <use fill="#000" transform="translate(-11.75 -11.75)" xlink:href="#c" />
+                                        </g>
+                                    </g>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Top bar actions -->
+
+                <!-- Card listing section -->
+                <div>
+                    <div>
+                        <div class="row" *ngIf="listing.data.length > 0">
+                            <div class="col-lg-4 col-sm-6 col-xs-12" *ngFor="let item of listing.data; let i = index">
+                                <app-content-detail-card class="" (indivCheckStatus)="indivStatusChange($event, i)"
+                                    [type]="{'section': tabSelected, 'tab': typeSelected=='review'?'completed':typeSelected}"
+                                    [reviewChecked]="item.reviewChecked" [s3Url]="listing.s3Url" [detail]="item">
+                                </app-content-detail-card>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Card listing section -->
+
+                <!-- Card listing section -->
+                <div class="col-lg-2" style="margin: 15px auto;text-align: center;"
+                    *ngIf="listing.data.length > 0 && listing.totalList > listing.data.length">
+                    <div class="Tabs__contents">
+                        <ul class="list-unstyled">
+                            <li><a class="rounded-pill" (click)='loadMoreData()'
+                                    style="background-color:#7a0600; color:#fff">
+                                    <span></span> Load More
+                                </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /Card listing section -->
+
+            </div>
+        </div>
+        <!-- Right Panel -->
+
+        <!-- Right Panel -->
+        <div class="col-lg-10 wrapPanel__contents" *ngIf="typeSelected == 'publish'" style="background: #151515;">
+            <div class="panel__contents">
+                <!-- Inner tab panel -->
+                <div class="tabs d-none">
+                    <ul class="nav nav-pills mb-3">
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="isActiveSubTab('artist')"
+                                (click)="changeActiveSubTab('artist')">ARTIST (<span
+                                    [innerHtml]="tabCountObj['artist']"></span>)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="isActiveSubTab('show')"
+                                (click)="changeActiveSubTab('show')">SHOW (<span
+                                    [innerHtml]="tabCountObj['show']"></span>)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="isActiveSubTab('collection')"
+                                (click)="changeActiveSubTab('collection')">COLLECTION (<span
+                                    [innerHtml]="tabCountObj['collection']"></span>)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" [class.active]="isActiveSubTab('individual')"
+                                (click)="changeActiveSubTab('individual')">INDIVIDUAL (<span
+                                    [innerHtml]="tabCountObj['individual']"></span>)</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /Inner tab panel -->
+
+                <!-- Top bar actions -->
+                <!-- <div class="topPanel__contents d-flex align-items-center justify-content-between"> -->
+                <div class="topPanel__contents d-none align-items-center justify-content-between">
+                    <div class="leftAction d-flex align-items-center">
+                        <div class="addArtist" *ngIf="tabSelected=='all' || tabSelected=='draft'">
+                            <div class="reviewSend">
+                                <!-- <button *ngIf="typeSelected == 'artist'" type="button"
+                                    class="btn rounded-pill sendReview" [routerLink]="['../../update-artist']">ADD
+                                    ARTIST</button>
+                                <button *ngIf="typeSelected == 'collection'" type="button"
+                                    class="btn rounded-pill sendReview" [routerLink]="['../../update-collection']">ADD
+                                    COLLECTION</button>
+                                <button *ngIf="typeSelected == 'show'" type="button" class="btn rounded-pill sendReview"
+                                    [routerLink]="['../../update-show']">ADD SHOW</button>
+                                <button *ngIf="typeSelected == 'individual'" type="button"
+                                    class="btn rounded-pill sendReview" [routerLink]="['../../update-individual']">ADD
+                                    INDIVIDUAL</button> -->
+                            </div>
+                        </div>
+                        <!-- send to review action for completed tab -->
+                        <!-- ??? -->
+                        <!-- <div class="cCheckbox" *ngIf="typeSelected == 'review'">
+                            <input class="styled-checkbox" #selectAllField id="styled-checkbox-4" type="checkbox"
+                                value="true"
+                                [checked]="sentToReviewLength==listing.data.length && listing.data.length!=0"
+                                (change)="selectAllEvent(selectAllField.checked)">
+                            <label for="styled-checkbox-4" class="mb-0 d-flex align-items-center">SELECT ALL</label>
+                        </div>
+                        <div class="reviewSend" *ngIf="typeSelected == 'review'">
+                            <button type="button" class="btn rounded-pill sendReview"
+                                [disabled]="sentToReviewLength == 0" (click)="apiMoveToPublish()">MOVE TO
+                                PUBLISH</button>
+                        </div> -->
+                        <!-- /send to review action for completed tab -->
+                    </div>
+                    <div class="right__topPanel">
+                        <div class="search position-relative">
+                            <input class="form-control rounded-pill" type="text" (ngModelChange)="onSearch($event)"
+                                [(ngModel)]="searchText" name="" value="" [placeholder]="'Search '+typeSelected" />
+                            <span class="position-absolute">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="18" height="18" viewBox="0 0 18 18">
+                                    <defs>
+                                        <path id="a"
+                                            d="M9.625 8.5h-.592l-.21-.203A4.853 4.853 0 0 0 10 5.125 4.875 4.875 0 1 0 5.125 10a4.853 4.853 0 0 0 3.172-1.178l.203.21v.593l3.75 3.742 1.117-1.117L9.625 8.5zm-4.5 0A3.37 3.37 0 0 1 1.75 5.125 3.37 3.37 0 0 1 5.125 1.75 3.37 3.37 0 0 1 8.5 5.125 3.37 3.37 0 0 1 5.125 8.5z" />
+                                        <path id="c" d="M0 0h37.5v37.5H0z" />
+                                    </defs>
+                                    <g fill="none" fill-rule="evenodd" opacity=".704" transform="translate(2 2)">
+                                        <mask id="b" fill="#fff">
+                                            <use xlink:href="#a" />
+                                        </mask>
+                                        <g mask="url(#b)">
+                                            <use fill="#000" transform="translate(-11.75 -11.75)" xlink:href="#c" />
+                                        </g>
+                                    </g>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Top bar actions -->
+
+                <!-- Top Panel -->
+                <div class="topRightPanel d-flex justify-content-between align-items-center">
+                    <div class="selContent">
+                        <h4>Selected Content
+                            ({{sendPublish.artist.length + sendPublish.show.length + sendPublish.collection.length + sendPublish.individual.length}})
+                        </h4>
+                        <p>Artist <span>({{sendPublish.artist.length}})</span>, Show
+                            <span>({{sendPublish.show.length}})</span>, Collection
+                            <span>({{sendPublish.collection.length}})</span>, Individual
+                            <span>({{sendPublish.individual.length}})</span></p>
+                    </div>
+                    <div class="rtPanel__Btn">
+                        <button type="button" class="btn rounded-pill d-none">Schedule Publish</button>
+                        <button type="button" class="btn rounded-pill" (click)="publishNow()">PUBLISH NOW</button>
+                    </div>
+                </div>
+                <!-- /Top Panel -->
+
+
+
+
+                <div class="accordion" id="right_RP">
+                    <div class="card">
+                        <div class="card-header" id="artFirst">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">
+                                <h6 class="">Artist <span>({{publishListing.artistData.length}})</span></h6>
+                            </button>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="artFirst" data-parent="#right_RP">
+                            <div class="card-body">
+                                <!-- Artist Card listing section -->
+                                <div>
+                                    <div>
+                                        <div class="row" *ngIf="publishListing.artistData.length > 0"
+                                            style="height: 200px; display: block;
+                                                position: relative; overflow: auto; contain: strict; transform: translateZ(0);  will-change: scroll-position; -webkit-overflow-scrolling: touch;">
+                                            <div class="scrolling_carousel">
+                                                <div class="pl-0 pr-0 publish__artist" id="content"  
+                                                    *ngFor="let item of publishListing.artistData; let i = index"
+                                                    [style.background-color]="item['gradientColor']">
+                                                    <div class="artImg__artist" data-toggle="dropdown">
+                                                        <!-- <img src="../../../assets/images/1.jpeg" class="img-fluid rounded-pill" alt="" style="border-color: #491425;"/> -->
+                                                        <img [defaultImage]="'../../../assets/ic-person.svg'"  
+                                                            class="img-fluid rounded-pill" width="60"
+                                                            [lazyLoad]="publishListing.s3Url['basePath']+publishListing.s3Url['artistPath']+'/'+item['profilePic']"
+                                                            [ngStyle]="{'border-color': item['gradientColor']}" />
+                                                            <div class="arrow_box dropdown-menu" aria-labelledby="downLink_1" style="transform: translate3d(0px, 50px, 0px);">
+                                                                <a class="dropdown-item" href="javascript:void(0);" (click)="onRemoveItem('reviewed', 'artist', item.slug)">Remove</a>
+                                                                <a class="dropdown-item" href="javascript:void(0);" (click)="onEdit('artist', item.slug)">Open/Edit</a>
+                                                            </div>
+                                                    </div>
+                                                    <div class="pubArtDt__artist">
+                                                        <h6 class="mb-0" [innerHtml]="item.firstName+' '+item.lastName">
+                                                        </h6>
+                                                        <p class="mb-0" [innerHtml]="item.city"></p>
+                                                    </div>
+                                                    <div class="cCheckbox artcrd">
+                                                        <!-- [class.active]="checked" -->
+                                                        <input class="styled-checkbox" 
+                                                            #selectOne value="true" [id]="'artist'+item._id"
+                                                            (change)="onPublishCheck('artist', item._id, item.slug, $event)"
+                                                            type="checkbox">
+                                                        <label [for]="'artist'+item._id"
+                                                            class="ml-2 mb-0 d-flex align-items-center"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- /Artist Card listing section -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="showSecond">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <h6 class="">Show <span>({{publishListing.showData.length}})</span></h6>
+                            </button>
+                        </div>
+                        <div id="collapseTwo" class="collapse show" aria-labelledby="showSecond"
+                            data-parent="#right_RP">
+                            <div class="card-body">
+                                <!-- Show Card listing section -->
+                                <div>
+                                    <div>
+                                        <div class="row" *ngIf="publishListing.showData.length > 0"
+                                            style="height: 330px; display: block;
+                                                    position: relative; overflow: auto; contain: strict; transform: translateZ(0);  will-change: scroll-position; -webkit-overflow-scrolling: touch;">
+                                            <div class="scrolling_carousel">
+                                                <div class="pl-0 pr-0 mr-3"
+                                                    *ngFor="let item of publishListing.showData; let i = index">
+                                                    <div class="showPub_wrap" style="background-color: #491425;">
+                                                        <div class="thumb__showPub" data-toggle="dropdown">
+                                                            <!-- <img class="img-fluid" src="https://d2tlhrnhiaq7gn.cloudfront.net/show/horizontal/large/uftfdS10Gf2GWLBXZlpV.jpeg" alt=""  /> -->
+                                                            <img [defaultImage]="'../../../assets/ic-person.svg'"
+                                                                class="img-fluid rounded-pill"
+                                                                [lazyLoad]="publishListing.s3Url['basePath']+publishListing.s3Url['showPath']+constantImg.horizontalLarge+item['thumbnail']['horizontal']['ratio1']['sourceLink']"
+                                                                class="img-fluid" />
+                                                                <div class="arrow_box dropdown-menu" aria-labelledby="downLink_1" style="transform: translate3d(0px, 50px, 0px);">
+                                                                    <a class="dropdown-item" href="javascript:void(0);" (click)="onRemoveItem('reviewed', 'show', item.slug)">Remove</a>
+                                                                    <a class="dropdown-item" href="javascript:void(0);" (click)="onEdit('show', item.slug)">Open/Edit</a>
+                                                                </div>
+                                                        </div>
+                                                        <div class="dt__showPub d-flex align-items-center">
+                                                            <div class="artImgs">
+                                                                <div class="rel__artImgs">
+                                                                    <span>
+                                                                        <img class="img-fluid rounded-pill"
+                                                                            *ngFor="let artistItem of item.artistList | slice:0:3;"
+                                                                            src="../../../assets/ic-person.svg"
+                                                                            [lazyLoad]="publishListing.s3Url['basePath']+publishListing.s3Url['showPath']+'/'+artistItem['profilePic']"
+                                                                            width="30px" height="30px" alt="">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="rem__artName ml-2">
+                                                                <p class="mb-0" *ngIf="item.artistList.length > 1">&
+                                                                    {{item.artistList.length - 1}} More</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="cCheckbox artcrd">
+                                                            <!-- [class.active]="checked" -->
+                                                            <input class="styled-checkbox" #selectOne value="true"
+                                                                 [id]="'show'+item._id"
+                                                                (click)="onPublishCheck('show',item._id, item.slug, $event)"
+                                                                type="checkbox">
+                                                            <label [for]="'show'+item._id"
+                                                                class="ml-2 mb-0 d-flex align-items-center"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- /Show Card listing section -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="collectionThree">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <h6 class="">Collection <span>({{publishListing.collectionData.length}})</span></h6>
+                            </button>
+                        </div>
+                        <div id="collapseThree" class="collapse show" aria-labelledby="collectionThree"
+                            data-parent="#right_RP">
+                            <div class="card-body">
+                                <!-- Collection Card listing section -->
+                                <div>
+                                    <div>
+                                        <div class="row" *ngIf="publishListing.collectionData.length > 0"
+                                            style="height: 330px; display: block;
+                                                    position: relative; overflow: auto; contain: strict; transform: translateZ(0);  will-change: scroll-position; -webkit-overflow-scrolling: touch;">
+                                            <div class="scrolling_carousel">
+                                                <div class="pl-0 pr-0 mr-3"
+                                                    *ngFor="let item of publishListing.collectionData; let i = index">
+                                                    <div class="collPub_wrap" style="background-color: #0b122c;">
+                                                        <div class="thumb__collPub" data-toggle="dropdown">
+                                                            <!-- <img class="img-fluid" src="https://d2tlhrnhiaq7gn.cloudfront.net/collection/horizontal/medium/wN0SDXxpc1DGrU3WFgZF.jpeg" alt=""  /> -->
+                                                            <img [defaultImage]="'../../../assets/ic-person.svg'"
+                                                                class="img-fluid"
+                                                                [lazyLoad]="publishListing.s3Url['basePath']+publishListing.s3Url['collectionPath']+constantImg.horizontalMedium+item['thumbnail']['horizontal']['ratio1']['sourceLink']"
+                                                                class="img-fluid" />
+                                                                <div class="arrow_box dropdown-menu" aria-labelledby="downLink_1" style="transform: translate3d(0px, 50px, 0px);">
+                                                                    <a class="dropdown-item" href="javascript:void(0);" (click)="onRemoveItem('reviewed', 'collection', item.slug)">Remove</a>
+                                                                    <a class="dropdown-item" href="javascript:void(0);" (click)="onEdit('collection', item.slug)">Open/Edit</a>
+                                                                </div>
+                                                        </div>
+                                                        <div class="dt__collPub">
+                                                            <div class="ttlVdo__collPub">
+                                                                <h6 class="mb-0" [innerHtml]="item.title"></h6>
+                                                                <p *ngIf="item.episodeCount > 0">{{item.episodeCount}}
+                                                                    Videos</p>
+                                                            </div>
+                                                            <div class="artImgs">
+                                                                <div class="rel__artImgs">
+                                                                    <span>
+                                                                        <img class="img-fluid rounded-pill"
+                                                                            *ngFor="let artistItem of item.artistList | slice:0:3;"
+                                                                            src="../../../assets/ic-person.svg"
+                                                                            [lazyLoad]="publishListing.s3Url['basePath']+publishListing.s3Url['artistPath']+'/'+artistItem['profilePic']"
+                                                                            width="30px" height="30px" alt="">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="rem__artName">
+                                                                <p class="mb-0" *ngIf="item.artistList.length > 1">&
+                                                                    {{item.artistList.length - 1}} More</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="cCheckbox artcrd">
+                                                            <!-- [class.active]="checked" -->
+                                                            <input class="styled-checkbox" 
+                                                                #selectOne value="true" [id]="'collection'+item._id"
+                                                                (click)="onPublishCheck('collection', item._id, item.slug, $event)"
+                                                                type="checkbox">
+                                                            <label [for]="'collection'+item._id"
+                                                                class="ml-2 mb-0 d-flex align-items-center"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Collection Card listing section -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="IndvFour">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    <h6 class="">Individual <span>({{publishListing.individualData.length}})</span></h6>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseFour" class="collapse show" aria-labelledby="IndvFour" data-parent="#right_RP">
+                            <div class="card-body">
+                                <!-- Individual Card listing section -->
+                                <div>
+                                    <div>
+                                        <div class="row" *ngIf="publishListing.individualData.length > 0"
+                                            style="height: 330px; display: block;
+                                                    position: relative; overflow: auto; contain: strict; transform: translateZ(0);  will-change: scroll-position; -webkit-overflow-scrolling: touch;">
+                                            <div class="scrolling_carousel">
+                                                <div class="col-lg-3 col-sm-6 col-xs-12 pl-0 pr-0 mr-3"
+                                                    *ngFor="let item of publishListing.individualData; let i = index">
+                                                    <div class="indvPub_wrap">
+                                                        <div class="thumb__indvPub" data-toggle="dropdown">
+                                                            <!-- <img class="img-fluid" src="https://d2tlhrnhiaq7gn.cloudfront.net/collection/horizontal/medium/wN0SDXxpc1DGrU3WFgZF.jpeg" alt=""  /> -->
+                                                            <img [defaultImage]="'../../../assets/ic-person.svg'"
+                                                                class="img-fluid"
+                                                                [lazyLoad]="publishListing.s3Url['basePath']+publishListing.s3Url['episodePath']+constantImg.horizontalSmall+item['thumbnail']['horizontal']['ratio1']['sourceLink']"
+                                                                class="img-fluid" />
+                                                                <div class="arrow_box dropdown-menu" aria-labelledby="downLink_1" style="transform: translate3d(0px, 50px, 0px);">
+                                                                    <a class="dropdown-item" href="javascript:void(0);" (click)="onRemoveItem('reviewed', 'episode', item.slug)">Remove</a>
+                                                                    <a class="dropdown-item" href="javascript:void(0);" (click)="onEdit('individual', item.slug)">Open/Edit</a>
+                                                                </div>
+                                                        </div>
+                                                        <div class="dt__indvPub">
+                                                            <div class="ttlDur__indvPub">
+                                                                <h6 class="mb-0" [innerHtml]="item.title"></h6>
+                                                                <p>Duration : <span
+                                                                        [innerHtml]="item.duration | timeFormatter"></span>
+                                                                    min</p>
+                                                            </div>
+                                                            <div class="artImgs d-none">
+                                                                <div class="rel__artImgs">
+                                                                    <span>
+                                                                        <img class="img-fluid rounded-pill"
+                                                                            src="https://d2tlhrnhiaq7gn.cloudfront.net/artist/44/veuINYvAdncA7izUD9so.jpeg"
+                                                                            width="30px" height="30px" alt="">
+                                                                    </span>
+                                                                    <span>
+                                                                        <img class="img-fluid rounded-pill"
+                                                                            src="https://d2tlhrnhiaq7gn.cloudfront.net/artist/44/XxIihPE7OCbJhYOUTjxS.jpeg"
+                                                                            width="30px" height="30px" alt="">
+                                                                    </span>
+                                                                    <span>
+                                                                        <img class="img-fluid rounded-pill"
+                                                                            src="https://d2tlhrnhiaq7gn.cloudfront.net/artist/44/fe37Aft2KRtjCpmgMh2J.jpeg"
+                                                                            width="30px" height="30px" alt="">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="rem__artName d-none">
+                                                                <p class="mb-0">& 11 More</p>
+                                                            </div>
+                                                            <div class="cCheckbox artcrd">
+                                                                <!-- [class.active]="checked" -->
+                                                                <input class="styled-checkbox" 
+                                                                    #selectOne value="true" [id]="'individual'+item._id"
+                                                                    (click)="onPublishCheck('individual', item._id, item.slug , $event)"
+                                                                    type="checkbox">
+                                                                <label [for]="'individual'+item._id"
+                                                                    class="ml-2 mb-0 d-flex align-items-center"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Card listing section -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Card listing section -->
+                <div class="col-lg-2" style="margin: 15px auto;text-align: center;"
+                    *ngIf="listing.data.length > 0 && listing.totalList > listing.data.length">
+                    <div class="Tabs__contents">
+                        <ul class="list-unstyled">
+                            <li><a class="rounded-pill" (click)='loadMoreData()'
+                                    style="background-color:#7a0600; color:#fff">
+                                    <span></span> Load More
+                                </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /Card listing section -->
+
+            </div>
+        </div>
+        <!-- Right Panel -->
+
+        <!-- </div> -->
+    </div>
+</div>
